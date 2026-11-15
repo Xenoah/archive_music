@@ -33,7 +33,11 @@ export async function loadTrack(slug, config) {
   if (existsSync(legacy)) { data = JSON.parse(await readFile(legacy, 'utf8')); body = data.description || ''; }
   if (existsSync(markdown)) { const md = parseFrontMatter(await readFile(markdown, 'utf8')); data = { ...data, ...md.data }; body = md.body; }
   else if (!existsSync(legacy)) track.errors.push(`${slug}.md または track.json が必要です`);
-  try { validateMeta({...data, artist:data.artist || config.author || 'Xenoah', tags:toList(data.tags), bpm:data.bpm === '' ? null : data.bpm}); } catch(error) { track.errors.push(error.message); }
+  track.generationTools = [];
+  try {
+    const metadata = validateMeta({...data, artist:data.artist || config.author || 'Xenoah', tags:toList(data.tags), bpm:data.bpm === '' ? null : data.bpm});
+    track.generationTools = metadata.generationTools;
+  } catch(error) { track.errors.push(error.message); }
   if (data.slug && data.slug !== slug) track.errors.push('Metadata slug must match its folder');
   track.demo = data.demo === true;
 

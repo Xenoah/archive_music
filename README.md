@@ -45,6 +45,7 @@ npm run upload -- "song.wav" --info "song.md" --bpm 128
 | `--info song.md` / `song.json` | 曲情報と説明文を読み込む |
 | `--title` / `--artist` / `--album` / `--genre` / `--key` | 曲情報を指定 |
 | `--tags "original,synth"` | カンマ区切りのタグ |
+| `--tools "Suno,Claude,FLSM"` | 生成ツール（任意・複数指定可） |
 | `--bpm 128` | BPM指定（20〜400）。省略は自動解析 |
 | `--draft` | 公開フォルダーへ出力しない |
 | `--hidden` | 曲URLからのみ閲覧。一覧・RSS・sitemapから除外 |
@@ -85,6 +86,7 @@ title: "夜の回路"
 artist: Xenoah
 genre: Electronic
 tags: [original, synth]
+generationTools: [Suno, Claude]
 bpm: 128
 key: Am
 license: All rights reserved
@@ -94,6 +96,8 @@ createdAt: 2026-11-15
 ---
 制作メモ。**Markdown**とリンクが使えます。
 ```
+
+生成ツールは `Suno`・`Claude`・`FLSM` から複数指定できます。コマンドでは `--tools "Suno,Claude"`、JSONでは `"generationTools": ["Suno", "Claude"]`、Studioではチェックボックスを使います。曲ページ・一覧に表示され、ツール名でも検索できます。大文字小文字と重複は正規化します。省略・空配列は未設定です。既存曲の変更も `track.json` またはMarkdownを編集してcommit・pushします。
 
 音源や画像が複数ある場合は `audio: original.flac` / `cover: cover.png` を指定します。パスはその作品フォルダー直下のファイル名のみ。slugは文字・数字から始まる文字・数字・`-`・`_`。CLI取り込み時は80文字以内、省略すると曲名＋音源ハッシュから生成します。
 

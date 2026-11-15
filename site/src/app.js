@@ -98,7 +98,7 @@ function renderTop(current) {
 function visibleTracks() {
   const f = state.filters, q = f.q.trim().toLowerCase(), min = Number(f.bpmMin), max = Number(f.bpmMax);
   const list = state.tracks.filter(track => {
-    if (q && ![track.title, track.artist, track.album, track.genre, ...track.tags].join('\n').toLowerCase().includes(q)) return false;
+    if (q && ![track.title, track.artist, track.album, track.genre, ...track.tags, ...(track.generationTools || [])].join('\n').toLowerCase().includes(q)) return false;
     if (f.genre && track.genre !== f.genre) return false;
     if (f.tag && !track.tags.includes(f.tag)) return false;
     if (f.fav && !state.favs.has(track.slug)) return false;
@@ -116,7 +116,7 @@ function visibleTracks() {
 
 function rowHtml(track) {
   const fav = state.favs.has(track.slug);
-  const sub = [track.artist, track.genre].filter(Boolean).map(esc).join(' · ');
+  const sub = [track.artist, track.genre, (track.generationTools || []).join(' / ')].filter(Boolean).map(esc).join(' · ');
   return `<li class="row" data-slug="${esc(track.slug)}">
     <button class="row-play" data-play="${esc(track.slug)}" aria-label="${esc(t('play'))}: ${esc(track.title)}">${coverHtml(track)}<span class="row-play-icon">${icon('play')}</span></button>
     <div class="row-main">
@@ -250,6 +250,7 @@ function trackView(app, slug) {
           ${fact(t('peak'), '—', 'factPeak')}
           ${fact(t('rms'), '—', 'factRms')}
           ${fact(t('license'), esc(track.license))}
+          ${track.generationTools?.length ? fact(t('generationTools'), esc(track.generationTools.join(' / '))) : ''}
         </dl>
       </header>
 

@@ -109,6 +109,7 @@ for (const track of tracks) {
     album: track.album,
     genre: track.genre,
     tags: track.tags,
+    generationTools: track.generationTools,
     key: track.key,
     license: track.license,
     status: track.status,
@@ -182,7 +183,7 @@ const isoDuration = (seconds) => `PT${Math.floor(seconds / 60)}M${Math.round(sec
 for (const track of published) {
   const dir = path.join(DIST_DIR, "t", track.slug);
   await mkdir(dir, { recursive: true });
-  const facts = [track.artist, track.genre, track.bpm ? `${track.bpm} BPM` : ""].filter(Boolean).join(" · ");
+  const facts = [track.artist, track.genre, track.bpm ? `${track.bpm} BPM` : "", track.generationTools.length ? `生成ツール: ${track.generationTools.join(" / ")}` : ""].filter(Boolean).join(" · ");
   const description = track.summary || facts || track.title;
   await writeFile(path.join(dir, "index.html"), page({
     title: `${track.title}${track.artist ? ` — ${track.artist}` : ""} | ${config.title}`,

@@ -1,13 +1,13 @@
 export const STRINGS = {
   ja: {
-    tracks: '楽曲', about: 'About', search: 'タイトル・タグで検索', allGenres: 'すべてのジャンル',
+    tracks: '楽曲', about: 'About', search: '曲名・タグ・生成ツールで検索', allGenres: 'すべてのジャンル',
     sortNew: '新しい順', sortOld: '古い順', sortTitle: 'タイトル順', sortBpmUp: 'BPM 低い順', sortBpmDown: 'BPM 高い順', sortLong: '長い順',
     favorites: 'お気に入り', favOnly: 'お気に入りだけ表示', addFav: 'お気に入りに追加', removeFav: 'お気に入りから外す',
     count: n => `${n} 曲`, noMatch: '条件に合う曲がありません。', clear: '条件をクリア',
     emptyTitle: 'まだ曲がありません', emptyBody: '音声ファイルを _inbox/ に置いて push すると、GitHub Actions が取り込み・解析・公開まで行います。',
     play: '再生', pause: '一時停止', prev: '前の曲', next: '次の曲', shuffle: 'シャッフル', repeat: 'リピート', repeatOne: '1曲リピート', mute: 'ミュート', volume: '音量',
     back: '一覧へ', download: 'ダウンロード', share: '共有', copyLink: 'リンクをコピー', copied: 'コピーしました', postX: 'X でポスト',
-    duration: '長さ', key: 'キー', format: '形式', license: 'ライセンス', released: '公開日', peak: 'ピーク', rms: 'RMS',
+    duration: '長さ', key: 'キー', format: '形式', license: 'ライセンス', generationTools: '生成ツール', released: '公開日', peak: 'ピーク', rms: 'RMS',
     waveform: '波形', oscilloscope: 'オシロスコープ', spectrum: 'スペクトラム (FFT)', tempo: 'テンポ', description: '説明', related: '関連する曲',
     zoomIn: '拡大', zoomOut: '縮小', beatGrid: 'ビート線', waveHint: 'クリック / ドラッグでシーク・Ctrl+ホイールで拡大',
     scopeIdle: '再生すると表示されます',
@@ -20,14 +20,14 @@ export const STRINGS = {
     links: 'リンク', rss: 'RSS'
   },
   en: {
-    tracks: 'Tracks', about: 'About', search: 'Search title or tag', allGenres: 'All genres',
+    tracks: 'Tracks', about: 'About', search: 'Search title, tag or generation tool', allGenres: 'All genres',
     sortNew: 'Newest', sortOld: 'Oldest', sortTitle: 'Title', sortBpmUp: 'BPM low → high', sortBpmDown: 'BPM high → low', sortLong: 'Longest',
     favorites: 'Favorites', favOnly: 'Show favorites only', addFav: 'Add to favorites', removeFav: 'Remove from favorites',
     count: n => `${n} track${n === 1 ? '' : 's'}`, noMatch: 'No tracks match these filters.', clear: 'Clear filters',
     emptyTitle: 'No tracks yet', emptyBody: 'Push audio files into _inbox/ and GitHub Actions will import, analyze and publish them.',
     play: 'Play', pause: 'Pause', prev: 'Previous', next: 'Next', shuffle: 'Shuffle', repeat: 'Repeat', repeatOne: 'Repeat one', mute: 'Mute', volume: 'Volume',
     back: 'All tracks', download: 'Download', share: 'Share', copyLink: 'Copy link', copied: 'Copied', postX: 'Post on X',
-    duration: 'Length', key: 'Key', format: 'Format', license: 'License', released: 'Released', peak: 'Peak', rms: 'RMS',
+    duration: 'Length', key: 'Key', format: 'Format', license: 'License', generationTools: 'Generation tools', released: 'Released', peak: 'Peak', rms: 'RMS',
     waveform: 'Waveform', oscilloscope: 'Oscilloscope', spectrum: 'Spectrum (FFT)', tempo: 'Tempo', description: 'About this track', related: 'Related tracks',
     zoomIn: 'Zoom in', zoomOut: 'Zoom out', beatGrid: 'Beat grid', waveHint: 'Click / drag to seek · Ctrl+wheel to zoom',
     scopeIdle: 'Shown while playing',
