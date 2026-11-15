@@ -16,6 +16,7 @@ jobs:
       pages: read
     outputs:
       pages_enabled: ${{ steps.pages.outputs.enabled }}
+      pages_artifact: github-pages-${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -55,6 +56,8 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+          # Reruns retain earlier artifacts; deploy only this attempt's output.
+          name: github-pages-${{ github.run_attempt }}
       - name: Check Pages initial setup
         id: pages
         env:
@@ -82,3 +85,5 @@ jobs:
       - name: Publish GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: ${{ needs.build.outputs.pages_artifact }}
