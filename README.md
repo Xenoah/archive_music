@@ -1,161 +1,161 @@
-# ARCHIVE MUSIC
+# OTODANA / archive_music
 
-音を残す。音を見つける。
-
-GitHub Actionsで音楽の作品フォルダーと最終公開フォルダーを構築する、静的な音楽投稿・試聴プラットフォームです。
+GitHub Actionsで作品フォルダーと最終公開フォルダーを構築する、音楽投稿・試聴プラットフォーム。
+受領した **OTODANA** をメイン画面に統合し、従来のローカル試聴・ZIP作成画面を **Studio** に残しています。
 
 公開先（Pages有効化後）: https://xenoah.github.io/archive_music/
 
-![ARCHIVE MUSIC preview](docs/preview.jpg)
+![OTODANA](docs/otodana-preview.jpg)
 
-## できること
+## 機能
 
-- 曲名・作者・タグ検索、ジャンル/BPM絞り込み、並び替え、お気に入り（端末内保存）
-- 音楽再生、一時停止、シーク、前後曲、リピート、音量、曲への共有リンク
-- dt-cue由来の3帯域全体波形、拡大、ビートグリッド、L/Rオシロスコープ、対数FFT
-- dt-cueの発音間隔(IOI)・自己相関(ACF)・周期グリッド(COMB)によるBPM候補と合議結果
-- 投稿フォームから音源・ジャケット・曲情報のZIPを作成
-- `_inbox`の音源/フォルダー/ZIPをActionsが正規化し、`content/tracks/{slug}/`を生成
-- 原本を`_uploaded`へ退避。再生用MP3、解析JSON、ジャケット、曲一覧を`dist`へ構築
-- オリジナル音源のダウンロード表示を曲ごとに設定
-- ローカル音源の試聴・ブラウザ内解析（アップロードなし）
+- 曲別ページ `/t/{slug}/`、日英UI、ページ移動中も再生が続くプレイヤー
+- タイトル・作者・タグ検索、ジャンル/BPM範囲、並び替え、お気に入り（端末内保存）
+- 再生・シーク・音量・ミュート・前後曲・シャッフル・リピート・Media Session
+- dt-cueの3帯域波形、拡大、ビートグリッド、L/Rオシロスコープ、対数FFT
+- IOI・ACF・COMBの3方式によるBPM推定と候補表示、手動グリッド補正
+- 事前解析した波形を最大2400点×4帯域の8bit配列に圧縮（デモのJSONは約15 kB）
+- 波形から自動ジャケット生成、曲別OGP・JSON-LD、RSS・sitemap
+- Studioでローカル音源を試聴・解析し、投稿用ZIPを準備
 
-初期状態には3つの**合成デモ音源**を収録します。投稿作品として偽装せず、画面上にもDEMOと明示しています。デモはビルド時に生成するため、リポジトリへバイナリをコミットしません。
+一覧・曲・About間は再生を維持します。Studioは独立した画面のため移動時に再生が止まります。説明文そのものは翻訳せず、投稿時の言語で表示します。
+初期状態の3曲は動作確認用の**合成デモ**です。画面にDEMOと表示し、ビルド時に生成します。
 
 ## 投稿方法
 
-### コマンドだけで投稿（推奨）
+Node.js 22以上、FFmpeg/ffprobe、Git認証を用意してください。npm依存パッケージはありません。
 
 ```bash
+git clone https://github.com/Xenoah/archive_music.git
+cd archive_music
 npm run upload -- "C:/Music/my-track.flac" --title "My Track" --artist "Xenoah" --genre "Electronic" --cover "C:/Music/cover.jpg"
 ```
 
-音源を検証し、投稿フォルダーを作成して、そのフォルダーだけをcommit・pushします。通常のGit認証が必要です。他の作業中のファイルをコミットしません。初回は `git clone https://github.com/Xenoah/archive_music.git` → `cd archive_music`。`--prepare-only` ならファイル準備だけ、`--draft` は下書き、`--download` は原本DL表示、`--bpm 128` はBPM指定です。Windows PowerShellで実行ポリシーに止まる場合は `npm.cmd run upload -- ...` を使います。
+音源を検証し、`_inbox/{slug}/` を作成して、そのフォルダーだけをcommit・pushします。他の作業中ファイルはコミットしません。Actionsが取り込み・解析・ビルドを実行します。
+Windows PowerShellで実行ポリシーに止まる場合は `npm.cmd` を使います。次回投稿前は `git pull --ff-only` でActionsの取り込みコミットを取得してください。
 
-同じ曲を編集するときは `content/tracks/{slug}/` を編集し、`git add` → `git commit` → `git push`。投稿のためにブラウザを開く必要はありません。
+Markdown/JSONの曲情報もコマンドで指定できます。明示したCLIオプションが曲情報ファイルに優先します。
 
-### ブラウザから
-
-1. サイトの「投稿する」で音源・曲名・作者・公開状態・利用条件を入力。
-2. 「投稿用ZIPを作成」で保存。
-3. 「GitHubの投稿先を開く」から `_inbox` へZIPを追加し、**Commit changes**。
-4. Actionsの **Import, build and publish music** が成功すると公開サイトへ反映。
-
-ZIP保存だけでは公開されません。GitHubアカウントとリポジトリ書き込み権限が必要です。第三者からの投稿はfork → Pull Request → 管理者によるマージを利用できます。匿名の直接投稿、サーバーアカウント、公開コメント、共有再生数は実装していません。
-
-GitHubのブラウザアップロードは1ファイル25 MiBまでなので、投稿フォームは音源＋画像の合計を24 MiBに制限します。これはZIPのヘッダー分も含めて余裕を確保するためです。
-
-### Git / GitHub Desktopから
-
-`_inbox/{slug}/` に次のファイルを配置してpushします。
-
-```text
-_inbox/my-track/
-  track.json          # templates/track.json を複製して編集（省略も可）
-  music.flac          # 1作品につき音源1つ
-  cover.jpg           # 任意。PNG/JPEG/WebP
+```bash
+npm run upload -- "song.wav" --info "song.md" --bpm 128
 ```
 
-音源単体を `_inbox/song.mp3` に置いても取り込めます。音源タグから曲名・作者・アルバム・ジャンルを読み取り、未設定の作者はXenoahになります。ZIPはSTORE/DEFLATEに対応し、パス遡及、シンボリックリンク、暗号化、重複エントリー、異常な展開サイズを拒否します。
+| オプション | 動作 |
+|---|---|
+| `--info song.md` / `song.json` | 曲情報と説明文を読み込む |
+| `--title` / `--artist` / `--album` / `--genre` / `--key` | 曲情報を指定 |
+| `--tags "original,synth"` | カンマ区切りのタグ |
+| `--bpm 128` | BPM指定（20〜400）。省略は自動解析 |
+| `--draft` | 公開フォルダーへ出力しない |
+| `--hidden` | 曲URLからのみ閲覧。一覧・RSS・sitemapから除外 |
+| `--download` | 原本へのダウンロードリンクを表示 |
+| `--prepare-only` | ファイル準備のみ。commit・pushを省略 |
 
-対応音源: **MP3 / WAV / FLAC / M4A / OGG / AAC / OPUS**。音源1つ95 MiB以下、長さ20分以内。ZIPは圧縮前後とも95 MiB以下、32エントリー以下です。Git LFSポインターや外部URL取り込みには対応しません。
+### 音源・フォルダー・ZIPの投入
 
-### 編集・削除・下書き
+`_inbox/` は以下を受け付けます。
 
-- 取り込み後は `content/tracks/{slug}/track.json` を編集してpush。
-- 原本を差し替えると解析キャッシュキーが変わり、再解析されます。
-- 同じslugの再投稿はエラーで止まり、既存曲を上書きしません。
-- 削除は対応する `content/tracks/{slug}/` フォルダーを削除してpush。次回ビルドで古い公開ファイルを除去します。
-- `status: "draft"` はカタログ、音源、ジャケット、解析JSONのすべてを公開出力から除外します。
-- **公開リポジトリにある原本・下書き・履歴はGitHubから閲覧できます。** 下書きはサイトの掲載制御であり、機密保管ではありません。
-- `download: false` は原本の公開コピーとDLボタンを省略します。再生用音声は配信されるためコピー防止にはなりません。
+- 音源単体。`song.wav` と同じ名前の `song.md` / `song.json`、`song.jpg` を並べても取り込めます。
+- 1音源と任意の画像・曲情報を入れたフォルダー。
+- 同じ構成のZIP。Studioで作成したZIPにも対応。
 
-## track.json
+曲情報は `track.json`、`info.json`、Front Matter付きMarkdownの**いずれか1つ**、画像も1つまで。指定がない項目は音源タグ・設定の作者名を使い、画像がなければ埋め込みカバーを抽出し、それもなければ波形から生成します。
 
-```json
-{
-  "slug": "my-track",
-  "title": "My Track",
-  "artist": "Xenoah",
-  "album": "",
-  "genre": "Electronic",
-  "tags": ["original", "synth"],
-  "description": "制作メモ",
-  "license": "All rights reserved",
-  "status": "public",
-  "download": false,
-  "createdAt": "2026-11-15",
-  "bpm": null
-}
+StudioでZIPを保存した場合も、アップロードはコマンドで行います。
+
+```bash
+# 保存したZIPを _inbox/ にコピーしてから実行
+npm run import -- --dry-run
+git add -- _inbox/my-song.zip
+git commit -m "Add my song" -- _inbox/my-song.zip
+git push origin main
 ```
 
-`slug` は英小文字/数字から始まる80文字以下の英小文字・数字・`-`・`_`。省略時は曲名＋音源SHA-256の先頭8文字から生成します。`bpm` は40〜240またはnull（自動）。明示したBPMが公開表示とビートグリッドに優先します。画面のBPM候補選択・手動補正はその試聴セッションだけに適用され、GitHub上の値は変えません。
+取り込み対象は **MP3 / WAV / FLAC / M4A / OGG / OGA / AAC / OPUS / AIF / AIFF / WEBM**。1音源95 MiB以下・20分以内。ZIPは圧縮前後95 MiB以下・32エントリー以下です。パス遡及・シンボリックリンク・暗号化・重複エントリー・CRC不一致を拒否します。StudioのZIP準備は24 MiB以下です。
 
-取り込み後には `audio: "original.ext"` と `cover: "cover.ext"` / null が自動設定されます。
+取り込み後は原本を `_uploaded/{slug}/` に退避し、`content/tracks/{slug}/track.json` と `original.ext` を生成します。同じslugへの再投稿は既存曲を上書きせずエラーにします。共同投稿はfork→Pull Request→マージで行えます。
 
-## Actionsと生成物
+## 曲情報の編集
 
-```mermaid
-flowchart TD
-  A["投稿ZIP・音源 / _inbox"] --> B["検証・作品フォルダー生成"]
-  B --> C["content/tracks / 曲情報・原本"]
-  B --> D["_uploaded / 投稿の退避"]
-  C --> E["FFmpeg変換・dt-cue解析"]
-  E --> F["dist / 最終公開フォルダー"]
-  F --> G["GitHub Pages"]
-  F --> H["Actions artifact / ZIP取得"]
+既存の `track.json` はそのまま使えます。OTODANA形式では `content/tracks/{slug}/{slug}.md` に次のように記述します。両方ある場合はMarkdownに書いた項目と本文がJSONに優先します。
+
+```markdown
+---
+title: "夜の回路"
+artist: Xenoah
+genre: Electronic
+tags: [original, synth]
+bpm: 128
+key: Am
+license: All rights reserved
+status: public
+download: false
+createdAt: 2026-11-15
+---
+制作メモ。**Markdown**とリンクが使えます。
 ```
+
+音源や画像が複数ある場合は `audio: original.flac` / `cover: cover.png` を指定します。パスはその作品フォルダー直下のファイル名のみ。slugは文字・数字から始まる文字・数字・`-`・`_`。CLI取り込み時は80文字以内、省略すると曲名＋音源ハッシュから生成します。
+
+編集・削除は `content/tracks/{slug}/` を変更してcommit・push。音源の変更時は再解析し、毎回 `dist/` を作り直すため削除した公開ファイルも残しません。
+
+- `public`: 一覧・曲ページ・音源を公開。
+- `hidden`: 曲ページ・音源を公開し、一覧と検索エンジン向け出力から除外。アクセス制限ではありません。
+- `draft`: **曲ページ・音源・画像・解析データのすべてをdistから除外**。受領したOTODANA版からこの挙動を変更しています。
+- 公開GitHubリポジトリの原本・下書き・履歴は閲覧可能です。
+- `download: false` はDLボタンを隠します。ロスレスからMP3へ変換した場合は原本の公開コピーも省略します。MP3などは原本を再生用に使うため、音声の保存を防ぐ機能ではありません。
+
+画面でのBPM補正は試聴中のグリッドにのみ適用し、投稿データを書き換えません。恒久変更は曲情報の `bpm` を編集します。
+
+## Actions・公開フォルダー
+
+`main` push → テスト → `_inbox`取り込み → 解析・変換・`dist`構築 → 取り込み結果をcommit → artifact保存 → Pages公開、を1回のワークフローで処理します。PRは検証のみです。
 
 ```text
 dist/
-  index.html
-  style.css
-  catalog.json
-  src/
-  assets/
-  music/{slug}/
-    stream.mp3          # 44.1 kHz / stereo / 192 kbit/s
-    analysis.json       # 波形、BPM候補、各方式の結果
-    cover.jpg or .svg
-    original.ext        # download=true のみ
+  index.html / 404.html / about/index.html
+  t/{slug}/index.html            # 曲ページ・OGP・JSON-LD
+  data/tracks.json               # 公開一覧
+  media/{slug}/                  # 配信音声・カバー・圧縮解析JSON
+  studio/                       # 従来の試聴・ZIP作成画面
+  rss.xml / sitemap.xml / robots.txt
 ```
 
-公開フォルダーは相対パスで動作し、リポジトリ名やPagesのサブパスに依存しません。投稿先だけ `GITHUB_REPOSITORY` から設定します。
+ロスレス音源は既定で256 kbit/sのMP3へ変換します。設定は `site.config.json`。解析・変換結果は `.cache/` に保存します。
+GitHub Actionsではリポジトリ名から `/archive_music/` を設定します。独自ドメイン等は `PUBLIC_BASE_PATH` と `PUBLIC_SITE` を指定してください。別サブパスへの配置ではそのパスで再ビルドが必要です。
 
-ワークフローは取り込み → ビルド → 取り込みコミット → artifact → Pagesを**同一実行**で行います。botのコミットは`[skip ci]`付きで再帰実行を避けます。PRワークフローは読み取り権限だけで検証し、公開・pushしません。
+Pagesの初期設定もコマンドで実行できます。GitHub CLIで認証済みの端末から:
 
-初回のPages有効化もコマンドで実行できます。GitHub CLIに `gh auth login` 済みの端末で `npm run setup:pages` を実行してください。Pagesの作成/更新後に公開ワークフローを起動します。未設定の間もActionsはビルド成果物を作成し、Pages公開だけをスキップします。画面で設定する場合は **Settings → Pages → Source → GitHub Actions**。`main`へのpushで起動します。Actionsの成果物 `archive-music-dist` は任意の静的Webサーバーへそのまま配置できます。
+```bash
+npm run setup:pages
+```
 
-## ローカル開発
+Pagesを有効化し、公開ワークフローを起動します。未設定でもActionsは `archive-music-dist` 成果物を作成し、Pagesデプロイだけをスキップします。
 
-Node.js 22以上、FFmpeg/ffprobeをPATHに用意してください。npmパッケージのインストールは不要です。
+## ローカル確認
 
 ```bash
 npm test
+npm run import -- --dry-run
 npm run import
+npm run validate
 npm run build
 npm run dev
 ```
 
-http://localhost:3000/ を開きます。`--port` または `PORT` に対応。HTMLをfile://で直開きする使い方ではありません。
+http://127.0.0.1:4173/ を開きます。HTTP Rangeによる音声シークに対応。`file://` の直開きは非対応です。
+`npm run analyze` は解析JSON・自動カバーを作品フォルダーへ保存する任意のコマンドです。通常のビルドはキャッシュを使います。
 
-デモを除外する場合は `INCLUDE_DEMOS=false npm run build` を使います。生成済みデモも公開出力から除外します。これら3つのslugはデモ用に予約しています。
+デモを除外する場合は設定の `demos` を `false` にするか、`INCLUDE_DEMOS=false npm run build`。生成済みデモも出力から除外します。`midnight-circuit` / `slow-orbit` / `afterimage` はデモ用に予約しています。
 
-## 解析の内容と制限
+## 解析・出典
 
-- `dt-cue_precision-media-player` の `tempo.js`、`analysis-core.js`、`views.js`、`analysis-worker.js` をMITライセンス表記付きで同梱。
-- 元コード固定コミット: `a6361e08a6c3644773ed5770544e175a7bee5820`
-- 公開時の解析入力はFFmpegで24 kHz / stereo / Float32へ変換。帯域波形の境界は元コードどおり250 Hz・4 kHz。左右のエネルギーを別々に集計し、逆相による打ち消しを防ぎます。
-- BPMは40〜240、0.25刻みの探索。最大8区間×24秒を評価し、3方式の候補を統合。無音・短い音源・周期が不明な音源は「不明」にします。
-- リアルタイムFFTは再生中のWeb Audio AnalyserNodeを使用し、FFTサイズ4096、平滑化0.75、対数70バンド。24 kHzの事前解析PCMではなく、44.1 kHzの配信音源を解析します。
-- BPMは推定であり、倍テン/半テン、変拍子、テンポ変化では候補確認と手動補正が必要です。信頼度の値はヒューリスティックな周期の強さで、正解確率ではありません。
-- 公開音源はストリーミング再生し、曲全体をWeb Audioへデコードしません。ローカル試聴の全解析は40 MiB・10分まで。コーデック対応はブラウザによります。
-- GitHub Pagesの容量・転送量制限内で運用する個人/小規模のアーカイブを想定しています。大規模な無制限音楽配信向けの構成ではありません。
-
-## 出典・ライセンス
-
-- フォルダー構築の構成参考: https://github.com/Xenoah/archive-3dmodels
-- プレイヤー/解析元: https://github.com/Xenoah/dt-cue_precision-media-player
-- プログラム: MIT。dt-cueの著作権表記を `site/src/vendor/dtcue/LICENSE` に保持。
-- 各音楽作品: `track.json` の利用条件を参照。プログラムのMITは投稿作品に自動適用されません。
-- GitHubのアップロード上限: https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository
+- フォルダー構築の参考: https://github.com/Xenoah/archive-3dmodels
+- プレイヤーとBPM解析: https://github.com/Xenoah/dt-cue_precision-media-player
+- 固定コミット: `a6361e08a6c3644773ed5770544e175a7bee5820`。解析コアとtempoコードは同一。
+- 受領したOTODANAを統合。原版READMEは [docs/OTODANA_REFERENCE.md](docs/OTODANA_REFERENCE.md)。
+- 事前解析は24 kHz・最大2ch。帯域境界250 Hz・4 kHz、左右エネルギーを別集計し逆相の打ち消しを防ぎます。
+- BPM自動探索40〜240、最大8区間×24秒、IOI・ACF・COMBの候補を統合。短い音源・無音・周期が不明な曲ではBPM不明になります。候補の百分率は正解確率ではありません。
+- オシロ・FFTは再生中の音声をWeb Audioで取得。FFTサイズ4096、平滑化0.75、対数軸。音量調整前から信号を取ります。
+- ブラウザのコーデック対応に依存します。倍テン・半テン・テンポ変化は候補の確認と手動補正が必要です。
+- プログラムはMIT。dt-cue表記を同梱。各楽曲の権利は曲情報のlicenseに従い、プログラムのMITは作品に自動適用されません。

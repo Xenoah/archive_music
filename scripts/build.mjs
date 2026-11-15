@@ -1,47 +1,234 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import {analyzePCM} from '../site/src/vendor/dtcue/analysis-core.js';
-import {AUDIO,IMAGE,MAX_BYTES,json,writeJSON,exists,filesIn,run,probe,validateMeta,validSlug,escape,hash} from './lib.mjs';
-import {generateDemo} from './generate-demo.mjs';
-const root=path.resolve(process.argv[2]||'.'),dist=path.join(root,'dist');
-if(process.env.INCLUDE_DEMOS!=='false')await generateDemo(root);
-await fs.rm(dist,{recursive:true,force:true});await fs.cp(path.join(root,'site'),dist,{recursive:true});
-await fs.mkdir(path.join(root,'.cache/analysis'),{recursive:true});
-const tracks=[];
-const coverSVG=(title,seed)=>{
-  const hue=parseInt(seed.slice(0,4),16)%360;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800"><defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="hsl(${hue},50%,18%)"/><stop offset="1" stop-color="hsl(${(hue+45)%360},65%,48%)"/></linearGradient><radialGradient id="r"><stop stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="800" height="800" fill="url(#g)"/><circle cx="590" cy="130" r="480" fill="url(#r)"/>${Array.from({length:18},(_,i)=>`<ellipse cx="400" cy="390" rx="${80+i*17}" ry="${55+i*14}" transform="rotate(${i*4-40} 400 390)" stroke="${i%3?'#eaf6da':'#d4f277'}" stroke-opacity="${.12+i*.02}" fill="none" stroke-width="2"/>`).join('')}<text x="54" y="72" fill="#fff" opacity=".7" font-family="sans-serif" font-size="17" letter-spacing="5">ARCHIVE / MUSIC</text><text x="54" y="713" fill="#fff" font-family="sans-serif" font-size="34">${escape(title.slice(0,28))}</text></svg>`;
-};
-for(const entry of (await fs.readdir(path.join(root,'content/tracks'),{withFileTypes:true})).sort((a,b)=>a.name.localeCompare(b.name))){
-  if(!entry.isDirectory()||entry.name.startsWith('.'))continue;
-  const dir=path.join(root,'content/tracks',entry.name);await filesIn(dir);
-  const raw=await json(path.join(dir,'track.json')),m=validateMeta(raw),slug=entry.name;
-  if(!validSlug(slug)||raw.slug!==slug)throw new Error(`Invalid slug: ${slug}`);
-  if(m.status==='draft'||(m.demo&&process.env.INCLUDE_DEMOS==='false'))continue;
-  if(typeof raw.audio!=='string'||path.basename(raw.audio)!==raw.audio||!AUDIO.has(path.extname(raw.audio)))throw new Error(`Invalid audio: ${slug}`);
-  const input=path.join(dir,raw.audio),bytes=await fs.readFile(input);if(bytes.length>MAX_BYTES)throw new Error('Audio exceeds 95 MiB');
-  const info=probe(input),stream=info.streams.find(s=>s.codec_type==='audio'),duration=Number(info.format.duration);
-  if(!stream||!Number.isFinite(duration)||duration<=0||duration>1200)throw new Error(`Invalid duration: ${slug}`);
-  const out=path.join(dist,'music',slug);await fs.mkdir(out,{recursive:true});
-  const key=hash(Buffer.concat([bytes,await fs.readFile(path.join(root,'site/src/vendor/dtcue/tempo.js')),await fs.readFile(path.join(root,'site/src/vendor/dtcue/analysis-core.js')),Buffer.from('24000-stereo-v1')]));
-  const cached=path.join(root,'.cache/analysis',key+'.json');let analysis;
-  if(await exists(cached))analysis=await json(cached);else{
-    const pcm=run('ffmpeg',['-v','error','-i',input,'-map','0:a:0','-ac','2','-ar','24000','-f','f32le','pipe:1'],{binary:true});
-    const length=pcm.length/8,l=new Float32Array(length),r=new Float32Array(length);for(let i=0;i<length;i++){l[i]=pcm.readFloatLE(i*8);r[i]=pcm.readFloatLE(i*8+4);}
-    analysis=analyzePCM([l,r],24000);for(const k of ['low','mid','high','peak'])analysis[k]=Array.from(analysis[k],v=>Math.round(v*10000)/10000);
-    await writeJSON(cached,analysis);
-  }
-  run('ffmpeg',['-v','error','-i',input,'-map','0:a:0','-vn','-ar','44100','-ac','2','-codec:a','libmp3lame','-b:a','192k','-map_metadata','-1',path.join(out,'stream.mp3')]);
-  await writeJSON(path.join(out,'analysis.json'),analysis);
-  if(raw.cover){
-    if(path.basename(raw.cover)!==raw.cover||!IMAGE.has(path.extname(raw.cover).toLowerCase()))throw new Error('Invalid cover');
-    run('ffmpeg',['-v','error','-i',path.join(dir,raw.cover),'-vf','scale=800:800:force_original_aspect_ratio=increase,crop=800:800','-frames:v','1',path.join(out,'cover.jpg')]);
-  }else await fs.writeFile(path.join(out,'cover.svg'),coverSVG(m.title,key));
-  if(m.download)await fs.copyFile(input,path.join(out,raw.audio));
-  const track={...m,slug,duration:analysis.duration,bpm:m.bpm??analysis.bpm,bpmSource:m.bpm?'manual':'estimated',confidence:analysis.confidence,sampleRate:Number(stream.sample_rate),channels:stream.channels,bytes:bytes.length,audio:`music/${slug}/stream.mp3`,analysis:`music/${slug}/analysis.json`,cover:`music/${slug}/cover.${raw.cover?'jpg':'svg'}`,original:m.download?`music/${slug}/${raw.audio}`:null,peaks:Array.from({length:100},(_,i)=>{const a=Math.floor(i/100*analysis.peak.length),b=Math.max(a+1,Math.floor((i+1)/100*analysis.peak.length));return Math.max(...analysis.peak.slice(a,b));})};
-  tracks.push(track);console.log(`Built ${slug}: ${analysis.bpm??'unknown'} BPM`);
+// content/tracks/ と site/ から、公開する最終フォルダ dist/ を組み立てる。
+//
+//   dist/index.html, 404.html, about/        … アプリ本体（どのURLでも同じシェル）
+//   dist/t/{slug}/index.html                 … 曲ごとのページ（OGP・JSON-LD 入り）
+//   dist/media/{slug}/                       … 音声・カバー・analysis.json
+//   dist/data/tracks.json                    … 一覧データ
+//   dist/rss.xml, sitemap.xml, robots.txt
+//
+// 環境変数: PUBLIC_BASE_PATH (例 /my-repo)、PUBLIC_SITE (例 https://user.github.io)
+import { generateDemo } from "./generate-demo.mjs";
+import { writeStudio } from "./lib/studio.mjs";
+import { existsSync } from "node:fs";
+import { copyFile, cp, mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { analyzeFile } from "./lib/analysis.mjs";
+import { canDecode, findFfmpeg, transcodeToMp3 } from "./lib/audio.mjs";
+import { ANALYZER_VERSION, CACHE_DIR, DIST_DIR, LOSSLESS_EXTENSIONS, MIME, SITE_DIR } from "./lib/constants.mjs";
+import { renderAutoCover } from "./lib/png.mjs";
+import { loadTracks, reportTracks } from "./lib/tracks.mjs";
+import { escapeHtml, hashFile, loadConfig, plainSummary, renderMarkdown } from "./lib/util.mjs";
+
+if (process.argv[2]) process.chdir(path.resolve(process.argv[2]));
+const config = await loadConfig();
+if (config.demos && process.env.INCLUDE_DEMOS !== "false") await generateDemo(process.cwd());
+const [owner, repo] = (process.env.GITHUB_REPOSITORY || "").split("/");
+const isActions = process.env.GITHUB_ACTIONS === "true";
+const autoBase = isActions && repo && repo.toLowerCase() !== `${owner}.github.io`.toLowerCase() ? repo : "";
+const base = `/${(process.env.PUBLIC_BASE_PATH ?? autoBase).replace(/^\/+|\/+$/g, "")}/`.replace(/^\/\/$/, "/");
+const origin = (process.env.PUBLIC_SITE ?? (config.siteUrl || (isActions && owner ? `https://${owner}.github.io` : ""))).replace(/\/+$/, "");
+const buildId = Date.now().toString(36);
+const absolute = (rel = "") => (origin ? `${origin}${base}${rel}` : `${base}${rel}`);
+const enc = encodeURIComponent;
+
+const tracks = await loadTracks(config);
+if (reportTracks(tracks) > 0) {
+  console.error("[ERROR] エラーのあるトラックがあるためビルドを中止しました。");
+  process.exit(1);
 }
-await writeJSON(path.join(dist,'catalog.json'),{title:'ARCHIVE MUSIC',repository:process.env.GITHUB_REPOSITORY||'Xenoah/archive_music',tracks:tracks.sort((a,b)=>b.createdAt.localeCompare(a.createdAt)||a.title.localeCompare(b.title)),generatedAt:new Date().toISOString()});
-await fs.writeFile(path.join(dist,'.nojekyll'),'');
-await fs.copyFile(path.join(root,'site/src/vendor/dtcue/LICENSE'),path.join(dist,'DTCUE-LICENSE.txt'));
-console.log(`Built ${tracks.length} tracks → dist/`);
+
+await rm(DIST_DIR, { recursive: true, force: true });
+await mkdir(path.join(DIST_DIR, "data"), { recursive: true });
+await cp(SITE_DIR, DIST_DIR, { recursive: true, filter: (source) => !source.endsWith("template.html") });
+
+const ffmpeg = findFfmpeg();
+const published = [];
+const studioAnalyses = new Map();
+for (const track of tracks) {
+  if (track.status === "draft" || (track.demo && (!config.demos || process.env.INCLUDE_DEMOS === "false"))) continue;
+  const mediaDir = path.join(DIST_DIR, "media", track.slug);
+  await mkdir(mediaDir, { recursive: true });
+  const mediaUrl = `media/${enc(track.slug)}/`;
+  const audioPath = path.join(track.dir, track.audioFile);
+  const ext = path.extname(track.audioFile).toLowerCase();
+  const hash = await hashFile(audioPath);
+
+  // --- 解析: コミット済みの analysis.json が最新ならそれを使い、無ければここで解析する
+  const cacheFile = path.join(CACHE_DIR, "analysis", `${hash}-v${ANALYZER_VERSION}.json`);
+  let analysis = track.analysis;
+  if (!analysis && existsSync(cacheFile)) { try { analysis = JSON.parse(await readFile(cacheFile, "utf8")); } catch {} }
+  if (!analysis || analysis.v !== ANALYZER_VERSION || analysis.hash !== hash) {
+    analysis = null;
+    if (canDecode(audioPath)) {
+      try { analysis = await analyzeFile(audioPath, hash); console.log(`[INFO] ${track.slug}: ビルド時に解析 (${analysis.bpm ?? "?"} BPM)`); }
+      catch (error) { console.warn(`[WARN]  ${track.slug}: 解析に失敗 (${error.message})。ブラウザ内解析にフォールバックします`); }
+    } else console.warn(`[WARN]  ${track.slug}: 事前解析なし。ブラウザ内解析にフォールバックします`);
+  }
+  if (analysis) {
+    await mkdir(path.dirname(cacheFile), { recursive: true });
+    await writeFile(cacheFile, JSON.stringify(analysis));
+    studioAnalyses.set(track.slug, analysis);
+    const { mini, hash: _hash, ...publicAnalysis } = analysis;
+    await writeFile(path.join(mediaDir, "analysis.json"), JSON.stringify(publicAnalysis));
+  }
+
+  // --- 音声: ロスレスは配信用 mp3 を作る（キャッシュあり）。原本は download: true のときだけ公開
+  let streamFile = track.audioFile, streamExt = ext, originalPublished = false;
+  if (config.stream.transcodeLossless && LOSSLESS_EXTENSIONS.has(ext) && ffmpeg) {
+    const cached = path.join(CACHE_DIR, "stream", `${hash}-${config.stream.bitrate}.mp3`);
+    if (!existsSync(cached)) {
+      await mkdir(path.dirname(cached), { recursive: true });
+      transcodeToMp3(audioPath, cached, config.stream.bitrate);
+      console.log(`[INFO] ${track.slug}: 配信用 mp3 を生成 (${config.stream.bitrate})`);
+    }
+    streamFile = "stream.mp3";
+    streamExt = ".mp3";
+    await copyFile(cached, path.join(mediaDir, streamFile));
+  } else {
+    await copyFile(audioPath, path.join(mediaDir, track.audioFile));
+    originalPublished = true;
+  }
+  if (track.download && !originalPublished) await copyFile(audioPath, path.join(mediaDir, track.audioFile));
+
+  // --- カバー
+  let cover = null;
+  if (track.coverFile && !track.coverAuto) {
+    await copyFile(path.join(track.dir, track.coverFile), path.join(mediaDir, track.coverFile));
+    cover = `${mediaUrl}${enc(track.coverFile)}`;
+  } else if (analysis) {
+    await writeFile(path.join(mediaDir, "auto-cover.png"), renderAutoCover(analysis, track.slug));
+    cover = `${mediaUrl}auto-cover.png`;
+  }
+
+  const bpm = track.bpmManual ?? analysis?.bpm ?? null;
+  published.push({
+    slug: track.slug,
+    demo: track.demo,
+    title: track.title,
+    artist: track.artist,
+    album: track.album,
+    genre: track.genre,
+    tags: track.tags,
+    key: track.key,
+    license: track.license,
+    status: track.status,
+    date: track.createdAt || track.uploadedAt || "",
+    uploadedAt: track.uploadedAt,
+    updatedAt: track.updatedAt,
+    duration: analysis?.duration ?? null,
+    bpm,
+    bpmSource: track.bpmManual !== null ? "manual" : analysis?.bpm != null ? "auto" : null,
+    audio: `${mediaUrl}${enc(streamFile)}`,
+    audioType: MIME[streamExt] || "audio/mpeg",
+    audioBytes: (await stat(path.join(mediaDir, streamFile))).size,
+    format: ext.slice(1).toUpperCase(),
+    download: track.download ? `${mediaUrl}${enc(track.audioFile)}` : null,
+    downloadName: track.download ? `${track.slug}${ext}` : null,
+    cover,
+    analysis: analysis ? `${mediaUrl}analysis.json` : null,
+    mini: analysis?.mini ?? null,
+    summary: plainSummary(track.body),
+    descriptionHtml: renderMarkdown(track.body)
+  });
+}
+
+published.sort((a, b) => (b.date || "").localeCompare(a.date || "") || a.title.localeCompare(b.title));
+const listed = published.filter((t) => t.status !== "hidden");
+const indexable = published.filter((t) => t.status === "public");
+await writeFile(path.join(DIST_DIR, "data", "tracks.json"), JSON.stringify({ build: buildId, tracks: listed }));
+await writeStudio(listed, studioAnalyses, config);
+await copyFile(path.join(SITE_DIR, "src", "LICENSE.dt-cue.txt"), path.join(DIST_DIR, "DTCUE-LICENSE.txt"));
+
+// --- HTML
+const template = await readFile(path.join(SITE_DIR, "template.html"), "utf8");
+const aboutPath = path.join("content", "about.md");
+const aboutHtml = existsSync(aboutPath) ? renderMarkdown(await readFile(aboutPath, "utf8")) : "";
+const site = { title: config.title, tagline: config.tagline, author: config.author, links: config.links, about: aboutHtml, hasOrigin: Boolean(origin) };
+const tagline = config.tagline.ja || config.tagline.en || "";
+
+function page({ title, description, rel, robots = "index, follow", image, type = "website", jsonLd, boot = {}, staticHtml = "" }) {
+  const head = [
+    `<meta name="description" content="${escapeHtml(description)}">`,
+    `<meta name="robots" content="${robots}">`,
+    origin ? `<link rel="canonical" href="${escapeHtml(absolute(rel))}">` : "",
+    `<meta property="og:site_name" content="${escapeHtml(config.title)}">`,
+    `<meta property="og:type" content="${type}">`,
+    `<meta property="og:title" content="${escapeHtml(title)}">`,
+    `<meta property="og:description" content="${escapeHtml(description)}">`,
+    origin ? `<meta property="og:url" content="${escapeHtml(absolute(rel))}">` : "",
+    image && origin ? `<meta property="og:image" content="${escapeHtml(absolute(image))}">` : "",
+    `<meta name="twitter:card" content="summary">`,
+    jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, "\\u003c")}</script>` : ""
+  ].filter(Boolean).join("\n");
+  const values = {
+    title: escapeHtml(title), head, base, build: buildId, siteTitle: escapeHtml(config.title), static: staticHtml,
+    boot: JSON.stringify({ site, build: buildId, ...boot }).replace(/</g, "\\u003c")
+  };
+  return template.replace(/\{\{(\w+)\}\}/g, (_, key) => values[key] ?? "");
+}
+
+const listHtml = `<h1>${escapeHtml(config.title)}</h1><p>${escapeHtml(tagline)}</p><ul>${indexable.map((t) => `<li><a href="${base}t/${enc(t.slug)}/">${escapeHtml(t.title)}</a>${t.artist ? ` — ${escapeHtml(t.artist)}` : ""}</li>`).join("")}</ul>`;
+const home = page({
+  title: tagline ? `${config.title} — ${tagline}` : config.title,
+  description: tagline || `${config.title} の楽曲一覧`, rel: "", staticHtml: listHtml,
+  jsonLd: { "@context": "https://schema.org", "@type": "WebSite", name: config.title, ...(origin ? { url: absolute("") } : {}) }
+});
+await writeFile(path.join(DIST_DIR, "index.html"), home);
+await writeFile(path.join(DIST_DIR, "404.html"), page({ title: config.title, description: tagline, rel: "", robots: "noindex, follow" }));
+await mkdir(path.join(DIST_DIR, "about"), { recursive: true });
+await writeFile(path.join(DIST_DIR, "about", "index.html"), page({ title: `About — ${config.title}`, description: tagline, rel: "about/", staticHtml: `<h1>About</h1>${aboutHtml}` }));
+
+const isoDuration = (seconds) => `PT${Math.floor(seconds / 60)}M${Math.round(seconds % 60)}S`;
+for (const track of published) {
+  const dir = path.join(DIST_DIR, "t", track.slug);
+  await mkdir(dir, { recursive: true });
+  const facts = [track.artist, track.genre, track.bpm ? `${track.bpm} BPM` : ""].filter(Boolean).join(" · ");
+  const description = track.summary || facts || track.title;
+  await writeFile(path.join(dir, "index.html"), page({
+    title: `${track.title}${track.artist ? ` — ${track.artist}` : ""} | ${config.title}`,
+    description, rel: `t/${enc(track.slug)}/`, image: track.cover, type: "music.song",
+    robots: track.status === "public" ? "index, follow" : "noindex, follow",
+    boot: { track },
+    staticHtml: `<h1>${escapeHtml(track.title)}</h1><p>${escapeHtml(facts)}</p>${track.descriptionHtml}<p><a href="${base}">${escapeHtml(config.title)}</a></p>`,
+    jsonLd: {
+      "@context": "https://schema.org", "@type": "MusicRecording", name: track.title,
+      ...(track.artist ? { byArtist: { "@type": "MusicGroup", name: track.artist } } : {}),
+      ...(track.duration ? { duration: isoDuration(track.duration) } : {}),
+      ...(track.genre ? { genre: track.genre } : {}),
+      ...(track.date ? { datePublished: track.date } : {}),
+      ...(origin ? { url: absolute(`t/${enc(track.slug)}/`) } : {}),
+      ...(origin && track.cover ? { image: absolute(track.cover) } : {})
+    }
+  }));
+}
+
+// --- RSS（enclosure 付きなのでポッドキャストアプリでも購読できる）/ sitemap / robots
+const xml = (value) => escapeHtml(value);
+const rssItems = indexable.slice(0, 100).map((t) => `<item>
+<title>${xml(t.title)}</title>
+<link>${xml(absolute(`t/${enc(t.slug)}/`))}</link>
+<guid isPermaLink="false">${xml(t.slug)}</guid>
+${t.date ? `<pubDate>${new Date(`${t.date}T00:00:00Z`).toUTCString()}</pubDate>` : ""}
+<description>${xml(t.summary || t.title)}</description>
+<enclosure url="${xml(absolute(t.audio))}" length="${t.audioBytes}" type="${t.audioType}"/>
+</item>`).join("\n");
+await writeFile(path.join(DIST_DIR, "rss.xml"), `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel>
+<title>${xml(config.title)}</title>
+<link>${xml(absolute(""))}</link>
+<description>${xml(tagline || config.title)}</description>
+${rssItems}
+</channel></rss>
+`);
+if (origin) {
+  const urls = ["", "about/", ...indexable.map((t) => `t/${enc(t.slug)}/`)];
+  await writeFile(path.join(DIST_DIR, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map((rel) => `<url><loc>${xml(absolute(rel))}</loc></url>`).join("\n")}
+</urlset>
+`);
+}
+await writeFile(path.join(DIST_DIR, "robots.txt"), `User-agent: *\nAllow: /\n${origin ? `Sitemap: ${absolute("sitemap.xml")}\n` : ""}`);
+await writeFile(path.join(DIST_DIR, ".nojekyll"), "");
+
+console.log(`[INFO] build: ${published.length} track(s) -> ${DIST_DIR}/  (base: ${base}${origin ? `, site: ${origin}` : ""})`);

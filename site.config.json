@@ -1,0 +1,23 @@
+{
+  "title": "OTODANA",
+  "tagline": {
+    "ja": "Xenoah の楽曲アーカイブ",
+    "en": "Music archive by Xenoah"
+  },
+  "author": "Xenoah",
+  "defaultLicense": "All rights reserved",
+  "defaultDownload": false,
+  "siteUrl": "",
+  "stream": {
+    "transcodeLossless": true,
+    "bitrate": "256k"
+  },
+  "links": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/Xenoah"
+    }
+  ],
+  "repository": "Xenoah/archive_music",
+  "demos": true
+}

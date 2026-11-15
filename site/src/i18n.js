@@ -1,0 +1,42 @@
+export const STRINGS = {
+  ja: {
+    tracks: '楽曲', about: 'About', search: 'タイトル・タグで検索', allGenres: 'すべてのジャンル',
+    sortNew: '新しい順', sortOld: '古い順', sortTitle: 'タイトル順', sortBpmUp: 'BPM 低い順', sortBpmDown: 'BPM 高い順', sortLong: '長い順',
+    favorites: 'お気に入り', favOnly: 'お気に入りだけ表示', addFav: 'お気に入りに追加', removeFav: 'お気に入りから外す',
+    count: n => `${n} 曲`, noMatch: '条件に合う曲がありません。', clear: '条件をクリア',
+    emptyTitle: 'まだ曲がありません', emptyBody: '音声ファイルを _inbox/ に置いて push すると、GitHub Actions が取り込み・解析・公開まで行います。',
+    play: '再生', pause: '一時停止', prev: '前の曲', next: '次の曲', shuffle: 'シャッフル', repeat: 'リピート', repeatOne: '1曲リピート', mute: 'ミュート', volume: '音量',
+    back: '一覧へ', download: 'ダウンロード', share: '共有', copyLink: 'リンクをコピー', copied: 'コピーしました', postX: 'X でポスト',
+    duration: '長さ', key: 'キー', format: '形式', license: 'ライセンス', released: '公開日', peak: 'ピーク', rms: 'RMS',
+    waveform: '波形', oscilloscope: 'オシロスコープ', spectrum: 'スペクトラム (FFT)', tempo: 'テンポ', description: '説明', related: '関連する曲',
+    zoomIn: '拡大', zoomOut: '縮小', beatGrid: 'ビート線', waveHint: 'クリック / ドラッグでシーク・Ctrl+ホイールで拡大',
+    scopeIdle: '再生すると表示されます',
+    analyzing: p => `ブラウザ内で解析中… ${p}%`, analysisFailed: '波形を解析できませんでした。再生はできます。', analysisTooLarge: 'ファイルが大きいためブラウザ内解析を省略しました。',
+    bpmManual: '手動指定', bpmAuto: '自動解析', bpmUnknown: 'BPM を検出できませんでした', agree: (n) => `第一候補 ${n}/3 方式一致`, consensus: '自動統合',
+    engineHint: '候補を押すとビート線に反映します（表示のみ）', resetTempo: '元に戻す', autoValue: v => `自動解析値 ${v}`,
+    ioi: '発音間隔', acf: '自己相関', comb: '周期グリッド', noCandidate: '検出なし',
+    draft: 'DRAFT', notFound: 'ページが見つかりません', error: '再生できませんでした',
+    aboutHow: 'このサイトについて', aboutBody: '波形・オシロスコープ・FFT・BPM 推定は dt-cue の実装を使っています。BPM は3方式（発音間隔 / 自己相関 / 周期グリッド）の推定を統合した参考値です。',
+    links: 'リンク', rss: 'RSS'
+  },
+  en: {
+    tracks: 'Tracks', about: 'About', search: 'Search title or tag', allGenres: 'All genres',
+    sortNew: 'Newest', sortOld: 'Oldest', sortTitle: 'Title', sortBpmUp: 'BPM low → high', sortBpmDown: 'BPM high → low', sortLong: 'Longest',
+    favorites: 'Favorites', favOnly: 'Show favorites only', addFav: 'Add to favorites', removeFav: 'Remove from favorites',
+    count: n => `${n} track${n === 1 ? '' : 's'}`, noMatch: 'No tracks match these filters.', clear: 'Clear filters',
+    emptyTitle: 'No tracks yet', emptyBody: 'Push audio files into _inbox/ and GitHub Actions will import, analyze and publish them.',
+    play: 'Play', pause: 'Pause', prev: 'Previous', next: 'Next', shuffle: 'Shuffle', repeat: 'Repeat', repeatOne: 'Repeat one', mute: 'Mute', volume: 'Volume',
+    back: 'All tracks', download: 'Download', share: 'Share', copyLink: 'Copy link', copied: 'Copied', postX: 'Post on X',
+    duration: 'Length', key: 'Key', format: 'Format', license: 'License', released: 'Released', peak: 'Peak', rms: 'RMS',
+    waveform: 'Waveform', oscilloscope: 'Oscilloscope', spectrum: 'Spectrum (FFT)', tempo: 'Tempo', description: 'About this track', related: 'Related tracks',
+    zoomIn: 'Zoom in', zoomOut: 'Zoom out', beatGrid: 'Beat grid', waveHint: 'Click / drag to seek · Ctrl+wheel to zoom',
+    scopeIdle: 'Shown while playing',
+    analyzing: p => `Analyzing in your browser… ${p}%`, analysisFailed: 'Could not analyze the waveform. Playback still works.', analysisTooLarge: 'File is too large for in-browser analysis.',
+    bpmManual: 'Set manually', bpmAuto: 'Auto-detected', bpmUnknown: 'No stable BPM detected', agree: (n) => `${n}/3 engines agree`, consensus: 'Consensus',
+    engineHint: 'Pick a candidate to preview it on the beat grid', resetTempo: 'Reset', autoValue: v => `Auto-detected ${v}`,
+    ioi: 'Onset intervals', acf: 'Autocorrelation', comb: 'Pulse grid', noCandidate: 'None found',
+    draft: 'DRAFT', notFound: 'Page not found', error: 'Playback failed',
+    aboutHow: 'About this site', aboutBody: 'Waveform, oscilloscope, FFT and BPM estimation come from dt-cue. BPM is a reference value combining three estimators (onset intervals / autocorrelation / pulse grid).',
+    links: 'Links', rss: 'RSS'
+  }
+};

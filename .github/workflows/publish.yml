@@ -32,8 +32,8 @@ jobs:
         run: npm run import
       - uses: actions/cache@v4
         with:
-          path: .cache/analysis
-          key: audio-analysis-${{ runner.os }}-${{ hashFiles('site/src/vendor/dtcue/*.js', 'content/tracks/**') }}
+          path: .cache
+          key: audio-analysis-${{ runner.os }}-${{ hashFiles('site/src/*.js', 'scripts/lib/*.mjs', 'content/tracks/**') }}
           restore-keys: audio-analysis-${{ runner.os }}-
       - name: Build final public folder
         run: npm run build
