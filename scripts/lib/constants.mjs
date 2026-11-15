@@ -38,6 +38,6 @@ export const STATUSES = new Set(["public", "draft", "hidden"]);
 export const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 export const FRONT_MATTER_ORDER = [
-  "title", "artist", "album", "genre", "tags", "bpm", "key", "license", "status",
+  "title", "artist", "album", "genre", "tags", "generationTools", "bpm", "key", "license", "status",
   "download", "createdAt", "uploadedAt", "updatedAt", "audio", "cover"
 ];

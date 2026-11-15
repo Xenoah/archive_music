@@ -1,5 +1,6 @@
 import {WaveView,ScopeView} from './vendor/dtcue/views.js';
 import {zipFiles} from './zip.js';
+import {GENERATION_TOOLS,normalizeGenerationTools} from '../../src/generation-tools.js';
 const $=s=>document.querySelector(s),audio=$('#audio');
 const time=s=>{s=Number.isFinite(s)?s:0;return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;};
 let catalog=[],filtered=[],selected=null,favoritesOnly=false,selection=0,analysisAbort=null,localURL=null,worker=null,frame=0,toastTimer,volumeBeforeMute=.75;
@@ -48,7 +49,7 @@ function renderSelected(){
   for(const id of ['current-cover','mini-cover'])$('#'+id).src=t.cover;
   $('#current-description').textContent=t.description||'このトラックの説明はまだありません。';$('#current-license').textContent=t.license;
   $('#current-format').textContent=t.sampleRate?`${(t.sampleRate/1000).toFixed(1)} kHz · ${t.channels===1?'MONO':'STEREO'}`:'LOCAL PREVIEW';
-  const tags=$('#current-tags');tags.replaceChildren();for(const s of [t.genre,...(t.demo?['DEMO']:[]),...(t.local?['LOCAL / 未投稿']:[])]){const el=document.createElement('span');el.className='badge'+(t.demo?' demo':'');el.textContent=s;tags.append(el);}
+  const tags=$('#current-tags');tags.replaceChildren();for(const s of [t.genre,...(t.generationTools?.length?['生成ツール: '+t.generationTools.join(' / ')]:[]),...(t.demo?['DEMO']:[]),...(t.local?['LOCAL / 未投稿']:[])]){const el=document.createElement('span');el.className='badge'+(t.demo?' demo':'');el.textContent=s;tags.append(el);}
   const dl=$('#download');dl.hidden=!t.original;if(t.original){dl.href=t.original;dl.download=t.title+new URL(t.original,location.href).pathname.match(/\.[^.]+$/)?.[0];}else dl.removeAttribute('href');
   $('#share').disabled=!!t.local;$('#current-fav').disabled=!!t.local;$('#current-fav').textContent=favorites.has(t.slug)?'♥':'♡';$('#current-fav').setAttribute('aria-pressed',String(favorites.has(t.slug)));$('#current-fav').setAttribute('aria-label',favorites.has(t.slug)?'お気に入りから削除':'お気に入りに追加');
   $('#tempo-engines').replaceChildren();$('#tempo-candidates').replaceChildren();$('#manual-bpm').value='';applyBPM(t.bpm,0,t.bpmSource==='manual'?'指定':'推定');
@@ -63,7 +64,7 @@ async function selectTrack(track,play=false){
 }
 function filteredTracks(){
   const query=$('#search').value.trim().toLowerCase(),genre=$('#genre').value,range=$('#bpm-filter').value;
-  return catalog.filter(t=>(!favoritesOnly||favorites.has(t.slug))&&(!genre||t.genre===genre)&&(!query||[t.title,t.artist,t.album,...t.tags].join(' ').toLowerCase().includes(query))&&(!range||t.bpm!=null&&(range==='slow'?t.bpm<100:range==='medium'?t.bpm>=100&&t.bpm<140:t.bpm>=140))).sort((a,b)=>$('#sort').value==='title'?a.title.localeCompare(b.title):$('#sort').value==='bpm'?(a.bpm??Infinity)-(b.bpm??Infinity):$('#sort').value==='duration'?a.duration-b.duration:b.createdAt.localeCompare(a.createdAt)||a.title.localeCompare(b.title));
+  return catalog.filter(t=>(!favoritesOnly||favorites.has(t.slug))&&(!genre||t.genre===genre)&&(!query||[t.title,t.artist,t.album,...t.tags,...(t.generationTools||[])].join(' ').toLowerCase().includes(query))&&(!range||t.bpm!=null&&(range==='slow'?t.bpm<100:range==='medium'?t.bpm>=100&&t.bpm<140:t.bpm>=140))).sort((a,b)=>$('#sort').value==='title'?a.title.localeCompare(b.title):$('#sort').value==='bpm'?(a.bpm??Infinity)-(b.bpm??Infinity):$('#sort').value==='duration'?a.duration-b.duration:b.createdAt.localeCompare(a.createdAt)||a.title.localeCompare(b.title));
 }
 function miniWave(peaks){
   const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 200 34');svg.setAttribute('aria-hidden','true');svg.classList.add('row-wave');const path=document.createElementNS(svg.namespaceURI,'path');path.setAttribute('d',peaks.map((v,i)=>{const h=Math.max(1,Math.pow(v,.65)*14);return `M${i*2},${17-h}v${h*2}`;}).join(''));path.setAttribute('stroke','currentColor');path.setAttribute('stroke-width','1');svg.append(path);return svg;
@@ -73,7 +74,7 @@ function renderList(){
   for(const [i,t] of filtered.entries()){
     const row=document.createElement('div');row.className='track-row'+(selected?.slug===t.slug?' active':'');
     const play=document.createElement('button');play.className='row-num';Object.assign(play.dataset,{slug:t.slug,number:String(i+1).padStart(2,'0'),title:t.title});play.textContent=selected?.slug===t.slug?(engine.playing?'Ⅱ':'▶'):play.dataset.number;play.setAttribute('aria-label',`再生 ${t.title}`);
-    const name=document.createElement('button');name.className='row-track';name.setAttribute('aria-label',`${t.title} を再生`);const img=document.createElement('img');img.src=t.cover;img.alt='';img.loading='lazy';const text=document.createElement('span'),title=document.createElement('span'),artist=document.createElement('span');title.className='row-title';title.textContent=t.title;artist.className='row-artist';artist.textContent=`${t.artist} · ${t.genre}`;text.append(title,artist);name.append(img,text);
+    const name=document.createElement('button');name.className='row-track';name.setAttribute('aria-label',`${t.title} を再生`);const img=document.createElement('img');img.src=t.cover;img.alt='';img.loading='lazy';const text=document.createElement('span'),title=document.createElement('span'),artist=document.createElement('span');title.className='row-title';title.textContent=t.title;artist.className='row-artist';artist.textContent=`${[t.artist,t.genre,...(t.generationTools||[])].filter(Boolean).join(' · ')}`;text.append(title,artist);name.append(img,text);
     const start=()=>selected?.slug===t.slug?togglePlay():selectTrack(t,true);play.addEventListener('click',start);name.addEventListener('click',start);
     const bpm=document.createElement('span');bpm.className='row-bpm';bpm.textContent=t.bpm??'—';const duration=document.createElement('span');duration.className='row-time';duration.textContent=time(t.duration);
     const fav=document.createElement('button');fav.className='row-fav';fav.textContent=favorites.has(t.slug)?'♥':'♡';fav.setAttribute('aria-label',`${t.title} のお気に入りを切り替え`);fav.setAttribute('aria-pressed',String(favorites.has(t.slug)));fav.addEventListener('click',()=>toggleFavorite(t.slug));
@@ -123,6 +124,11 @@ $('#local-file').addEventListener('change',async e=>{
 });
 
 const dialog=$('#upload-dialog'),form=$('#upload-form');let droppedAudio=null;
+for(const tool of GENERATION_TOOLS){
+  const label=document.createElement('label'),input=document.createElement('input');
+  input.type='checkbox';input.name='generationTools';input.value=tool;
+  label.append(input,document.createTextNode(tool));$('#generation-tool-options').append(label);
+}
 document.querySelectorAll('[data-upload]').forEach(b=>b.addEventListener('click',()=>dialog.showModal()));$('[data-close]').addEventListener('click',()=>dialog.close());
 function showFile(f){if(!f)return;$('#upload-file-label').textContent=f.name;if(!form.elements.title.value)form.elements.title.value=f.name.replace(/\.[^.]+$/,'');}
 $('#upload-audio').addEventListener('change',e=>{droppedAudio=null;showFile(e.target.files[0]);});
@@ -138,10 +144,10 @@ form.addEventListener('submit',async e=>{
     button.disabled=true;button.textContent='パッケージを作成中…';const data=new FormData(form),title=String(data.get('title')).trim(),artist=String(data.get('artist')).trim();if(!title||!artist)throw new Error('曲名とアーティストを入力してください');
     const tags=String(data.get('tags')).split(/[,、]/).map(s=>s.trim()).filter(Boolean);if(tags.length>12||tags.some(s=>s.length>40))throw new Error('タグは12個まで、各40文字以内です');
     const base=title.normalize('NFKC').toLowerCase().replace(/[^a-z0-9_-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,50)||'track';
-    const slug=base+'-'+crypto.randomUUID().slice(0,8),meta={slug,title,artist,genre:String(data.get('genre')).trim()||'Other',tags,description:String(data.get('description')),license:String(data.get('license')),status:String(data.get('status')),download:data.get('download')==='on',createdAt:new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Tokyo'}),bpm:data.get('bpm')?Number(data.get('bpm')):null};
+    const slug=base+'-'+crypto.randomUUID().slice(0,8),meta={slug,title,artist,genre:String(data.get('genre')).trim()||'Other',tags,generationTools:normalizeGenerationTools(data.getAll('generationTools')),description:String(data.get('description')),license:String(data.get('license')),status:String(data.get('status')),download:data.get('download')==='on',createdAt:new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Tokyo'}),bpm:data.get('bpm')?Number(data.get('bpm')):null};
     const entries=[{name:`${slug}/track.json`,data:JSON.stringify(meta,null,2)},{name:`${slug}/audio.${ext}`,data:new Uint8Array(await file.arrayBuffer())}];
     if(cover)entries.push({name:`${slug}/cover.${cover.name.split('.').pop().toLowerCase()}`,data:new Uint8Array(await cover.arrayBuffer())});
-    saveBlob(zipFiles(entries),slug+'.zip');status.textContent='ZIPを保存しました。下のリンク先にZIPを追加して「Commit changes」を押してください。Actionsが成功すると公開されます。';
+    saveBlob(zipFiles(entries),slug+'.zip');status.textContent='ZIPを保存しました。_inbox/ に配置し、git commit / push してください。Actionsが成功すると公開されます。';
   }catch(err){status.textContent=err.message;}finally{button.disabled=false;button.textContent='投稿用ZIPを作成 ↓';}
 });
 

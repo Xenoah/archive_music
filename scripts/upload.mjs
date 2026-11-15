@@ -7,10 +7,10 @@ import {toList} from './lib/util.mjs';
 
 const args=process.argv.slice(2),filename=args.shift();
 if(!filename||filename==='--help'){
-  console.log('npm run upload -- <audio> [--title "曲名"] [--artist "作者"] [--genre Electronic] [--cover image.jpg] [--bpm 128] [--info song.md] [--hidden] [--draft] [--download] [--prepare-only]');
+  console.log('npm run upload -- <audio> [--title "曲名"] [--artist "作者"] [--genre Electronic] [--tools "Suno,Claude,FLSM"] [--cover image.jpg] [--bpm 128] [--info song.md] [--hidden] [--draft] [--download] [--prepare-only]');
   process.exit(filename?0:1);
 }
-const flags=new Set(['draft','hidden','download','prepare-only']),allowed=new Set(['title','artist','genre','cover','bpm','license','description','info','album','tags','key']),options={};
+const flags=new Set(['draft','hidden','download','prepare-only']),allowed=new Set(['title','artist','genre','cover','bpm','license','description','info','album','tags','key','tools']),options={};
 while(args.length){const flag=args.shift();if(!flag.startsWith('--'))throw new Error(`Unknown argument: ${flag}`);const key=flag.slice(2);if(flags.has(key))options[key]=true;else if(allowed.has(key)&&args.length&&!args[0].startsWith('--'))options[key]=args.shift();else throw new Error(`Invalid option: ${flag}`);}
 const root=run('git',['rev-parse','--show-toplevel']).trim();
 if(!await exists(path.join(root,'scripts/import-inbox.mjs')))throw new Error('Run inside the archive_music repository');
@@ -30,6 +30,7 @@ if(options.info){
 const values={title:tags.title||path.parse(audio).name,artist:tags.artist||config.author||'Xenoah',genre:tags.genre||'Other',album:tags.album||'',license:config.defaultLicense||'All rights reserved',download:config.defaultDownload??false,...raw};
 for(const key of ['title','artist','genre','album','license','description','key'])if(options[key]!==undefined)values[key]=options[key];
 if(options.tags!==undefined)values.tags=toList(options.tags);else if(typeof values.tags==='string')values.tags=toList(values.tags);
+if(options.tools!==undefined)values.generationTools=options.tools;
 if(options.bpm!==undefined)values.bpm=Number(options.bpm);else if(values.bpm==='')values.bpm=null;
 if(options.draft&&options.hidden)throw new Error('Choose --draft or --hidden');
 if(options.draft)values.status='draft';if(options.hidden)values.status='hidden';if(options.download)values.download=true;

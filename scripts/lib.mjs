@@ -4,6 +4,7 @@ import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {inflateRawSync} from 'node:zlib';
 import {crc32} from '../site/src/zip.js';
+import {normalizeGenerationTools} from '../site/src/generation-tools.js';
 export const AUDIO=new Set(['.mp3','.wav','.flac','.m4a','.ogg','.oga','.aac','.opus','.aif','.aiff','.webm']);
 export const IMAGE=new Set(['.png','.jpg','.jpeg','.webp','.gif','.avif']);
 export const MAX_BYTES=95*1024*1024;
@@ -39,7 +40,7 @@ export function validateMeta(m){
   if(m.bpm!==undefined&&m.bpm!==null&&(!Number.isFinite(m.bpm)||m.bpm<20||m.bpm>400))throw new Error('manual bpm must be 20–400');
   if(m.download!==undefined&&typeof m.download!=='boolean')throw new Error('download must be boolean');
   if(m.createdAt&&(!/^\d{4}-\d{2}-\d{2}$/.test(m.createdAt)||!Number.isFinite(Date.parse(m.createdAt))||new Date(m.createdAt).toISOString().slice(0,10)!==m.createdAt))throw new Error('createdAt must be a valid YYYY-MM-DD');
-  return {title:m.title.trim(),artist:m.artist.trim(),album:m.album||'',key:m.key||'',description:m.description||'',genre:m.genre||'Other',license:m.license||'All rights reserved',status:m.status||'public',tags:m.tags||[],bpm:m.bpm??null,download:m.download??false,createdAt:m.createdAt||new Date().toISOString().slice(0,10),demo:m.demo===true};
+  return {title:m.title.trim(),artist:m.artist.trim(),album:m.album||'',key:m.key||'',description:m.description||'',genre:m.genre||'Other',license:m.license||'All rights reserved',status:m.status||'public',tags:m.tags||[],generationTools:normalizeGenerationTools(m.generationTools),bpm:m.bpm??null,download:m.download??false,createdAt:m.createdAt||new Date().toISOString().slice(0,10),demo:m.demo===true};
 }
 export function probe(p){return JSON.parse(run('ffprobe',['-v','error','-show_format','-show_streams','-of','json',p]));}
 // Parse central directory; forbid traversal, symlinks, encrypted files and zip bombs.
