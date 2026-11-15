@@ -1,0 +1,13 @@
+{
+  "slug": "my-first-track",
+  "title": "My First Track",
+  "artist": "Xenoah",
+  "genre": "Electronic",
+  "tags": ["original"],
+  "description": "",
+  "license": "All rights reserved",
+  "status": "public",
+  "download": false,
+  "createdAt": "2026-11-15",
+  "bpm": null
+}
