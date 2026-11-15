@@ -1,0 +1,8 @@
+dist/
+node_modules/
+.cache/
+*.log
+# Reproducible generated demo assets; never commit binary fixtures.
+content/tracks/midnight-circuit/
+content/tracks/slow-orbit/
+content/tracks/afterimage/

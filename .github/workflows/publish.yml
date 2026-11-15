@@ -1,0 +1,84 @@
+name: Import, build and publish music
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: music-publish
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: read
+    outputs:
+      pages_enabled: ${{ steps.pages.outputs.enabled }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install audio tools
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Test audio analysis and import pipeline
+        run: npm test
+      - name: Normalize inbox into track folders
+        run: npm run import
+      - uses: actions/cache@v4
+        with:
+          path: .cache/analysis
+          key: audio-analysis-${{ runner.os }}-${{ hashFiles('site/src/vendor/dtcue/*.js', 'content/tracks/**') }}
+          restore-keys: audio-analysis-${{ runner.os }}-
+      - name: Build final public folder
+        run: npm run build
+      - name: Commit imported source folders
+        run: |
+          git add _inbox _uploaded content/tracks
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'Import music inbox [skip ci]'
+            git push origin HEAD:main
+          fi
+      - name: Save portable public folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: archive-music-dist
+          path: dist
+          include-hidden-files: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - name: Check Pages initial setup
+        id: pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api "repos/$GITHUB_REPOSITORY/pages" --jq '.build_type' > "$RUNNER_TEMP/music-pages-type"; then
+            if [ "$(cat "$RUNNER_TEMP/music-pages-type")" = "workflow" ]; then
+              echo 'enabled=true' >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+          echo 'enabled=false' >> "$GITHUB_OUTPUT"
+          echo '::warning::Pages needs one-time setup. Run npm run setup:pages from an authenticated local terminal. The final dist folder is available in archive-music-dist.'
+  deploy:
+    needs: build
+    if: needs.build.outputs.pages_enabled == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
