@@ -14,5 +14,8 @@
   "demo": false,
   "slug": "track-9b113625",
   "audio": "original.mp3",
-  "cover": "cover.jpg"
+  "cover": "cover.jpg",
+  "generationTools": [
+    "Suno"
+  ]
 }
