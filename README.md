@@ -3,7 +3,7 @@
 GitHub Actionsで作品フォルダーと最終公開フォルダーを構築する、音楽投稿・試聴プラットフォーム。
 受領した **OTODANA** をメイン画面に統合し、従来のローカル試聴・ZIP作成画面を **Studio** に残しています。
 
-公開先（Pages有効化後）: https://xenoah.github.io/archive_music/
+公開先: https://xenoah.github.io/archive_music/
 
 ![OTODANA](docs/otodana-preview.jpg)
 
