@@ -1,0 +1,14 @@
+* text=auto
+*.mp3 binary
+*.wav binary
+*.flac binary
+*.ogg binary
+*.opus binary
+*.m4a binary
+*.aac binary
+*.aif binary
+*.aiff binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary

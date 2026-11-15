@@ -4,15 +4,15 @@ import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {inflateRawSync} from 'node:zlib';
 import {crc32} from '../site/src/zip.js';
-export const AUDIO=new Set(['.mp3','.wav','.flac','.m4a','.ogg','.aac','.opus']);
-export const IMAGE=new Set(['.png','.jpg','.jpeg','.webp']);
+export const AUDIO=new Set(['.mp3','.wav','.flac','.m4a','.ogg','.oga','.aac','.opus','.aif','.aiff','.webm']);
+export const IMAGE=new Set(['.png','.jpg','.jpeg','.webp','.gif','.avif']);
 export const MAX_BYTES=95*1024*1024;
 export const hash=data=>createHash('sha256').update(data).digest('hex');
 export const exists=async p=>{try{await fs.access(p);return true;}catch{return false;}};
 export const json=async p=>JSON.parse(await fs.readFile(p,'utf8'));
 export const writeJSON=(p,d)=>fs.writeFile(p,JSON.stringify(d,null,2)+'\n');
 export const slugify=s=>s.normalize('NFKC').toLowerCase().replace(/[^a-z0-9_-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,64)||'track';
-export const validSlug=s=>typeof s==='string'&&/^[a-z0-9][a-z0-9_-]{0,79}$/.test(s);
+export const validSlug=s=>typeof s==='string'&&/^[\p{L}\p{N}][\p{L}\p{N}_-]{0,79}$/u.test(s);
 export const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function run(command,args,options={}){
   const r=spawnSync(command,args,{encoding:options.binary?null:'utf8',timeout:180000,maxBuffer:240*1024*1024,...options});
@@ -30,16 +30,16 @@ export async function filesIn(dir){
 }
 export function validateMeta(m){
   if(!m||typeof m!=='object'||Array.isArray(m))throw new Error('track.json must be an object');
-  for(const [key,max] of [['title',160],['artist',120],['album',160],['description',6000],['genre',60],['license',100],['createdAt',10]]){
+  for(const [key,max] of [['title',160],['artist',120],['album',160],['description',6000],['genre',60],['key',20],['license',100],['createdAt',10]]){
     if(m[key]!==undefined&&(typeof m[key]!=='string'||m[key].length>max))throw new Error(`Invalid ${key}`);
   }
   if(!m.title?.trim()||!m.artist?.trim())throw new Error('title and artist are required');
-  if(m.status!==undefined&&!['public','draft'].includes(m.status))throw new Error('status must be public or draft');
+  if(m.status!==undefined&&!['public','draft','hidden'].includes(m.status))throw new Error('status must be public, draft or hidden');
   if(m.tags!==undefined&&(!Array.isArray(m.tags)||m.tags.length>12||m.tags.some(t=>typeof t!=='string'||t.length>40)))throw new Error('Invalid tags');
-  if(m.bpm!==undefined&&m.bpm!==null&&(!Number.isFinite(m.bpm)||m.bpm<40||m.bpm>240))throw new Error('bpm must be 40–240');
+  if(m.bpm!==undefined&&m.bpm!==null&&(!Number.isFinite(m.bpm)||m.bpm<20||m.bpm>400))throw new Error('manual bpm must be 20–400');
   if(m.download!==undefined&&typeof m.download!=='boolean')throw new Error('download must be boolean');
-  if(m.createdAt&&!/^\d{4}-\d{2}-\d{2}$/.test(m.createdAt))throw new Error('createdAt must be YYYY-MM-DD');
-  return {title:m.title.trim(),artist:m.artist.trim(),album:m.album||'',description:m.description||'',genre:m.genre||'Other',license:m.license||'All rights reserved',status:m.status||'public',tags:m.tags||[],bpm:m.bpm??null,download:m.download??false,createdAt:m.createdAt||new Date().toISOString().slice(0,10),demo:m.demo===true};
+  if(m.createdAt&&(!/^\d{4}-\d{2}-\d{2}$/.test(m.createdAt)||!Number.isFinite(Date.parse(m.createdAt))||new Date(m.createdAt).toISOString().slice(0,10)!==m.createdAt))throw new Error('createdAt must be a valid YYYY-MM-DD');
+  return {title:m.title.trim(),artist:m.artist.trim(),album:m.album||'',key:m.key||'',description:m.description||'',genre:m.genre||'Other',license:m.license||'All rights reserved',status:m.status||'public',tags:m.tags||[],bpm:m.bpm??null,download:m.download??false,createdAt:m.createdAt||new Date().toISOString().slice(0,10),demo:m.demo===true};
 }
 export function probe(p){return JSON.parse(run('ffprobe',['-v','error','-show_format','-show_streams','-of','json',p]));}
 // Parse central directory; forbid traversal, symlinks, encrypted files and zip bombs.
