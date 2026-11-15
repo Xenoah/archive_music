@@ -4,7 +4,9 @@
 
 GitHub Actionsで音楽の作品フォルダーと最終公開フォルダーを構築する、静的な音楽投稿・試聴プラットフォームです。
 
-公開サイト: https://xenoah.github.io/archive_music/
+公開先（Pages有効化後）: https://xenoah.github.io/archive_music/
+
+![ARCHIVE MUSIC preview](docs/preview.jpg)
 
 ## できること
 
