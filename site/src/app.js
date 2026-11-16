@@ -237,6 +237,7 @@ function trackView(app, slug) {
             <button class="primary big-play" data-play="${esc(track.slug)}">${icon('play')}<span>${esc(t('play'))}</span></button>
             <button class="icon-button row-fav" data-fav="${esc(track.slug)}" aria-pressed="${fav}" aria-label="${esc(t(fav ? 'removeFav' : 'addFav'))}">${icon('heart')}</button>
             ${track.download ? `<a class="button" href="${esc(resolve(track.download))}" download="${esc(track.downloadName)}">${icon('download')}${esc(t('download'))} <small>${esc(track.format)}</small></a>` : ''}
+            ${track.midi ? `<a class="button" href="${esc(resolve(track.midi))}" download="${esc(track.midiName)}">>${icon('download')}${esc(t('midiDownload'))} <small>MID</small></a>` : ''}
             <button class="icon-button" id="share" aria-label="${esc(t('share'))}" title="${esc(t('share'))}">${icon('share')}</button>
             <button class="icon-button" id="copy" aria-label="${esc(t('copyLink'))}" title="${esc(t('copyLink'))}">${icon('link')}</button>
           </div>
