@@ -1,0 +1,26 @@
+{
+  "title": "Desert Caravan",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "D minor",
+  "description": "",
+  "genre": "Middle Eastern Folk",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "world",
+    "folk"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 96,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "desert-caravan-8a4fb38f",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
