@@ -1,0 +1,26 @@
+{
+  "title": "Coffee and Sunshine",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "C major",
+  "description": "",
+  "genre": "Bossa Nova",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "latin",
+    "cafe"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 122,
+  "download": false,
+  "createdAt": "2026-11-16",
+  "demo": false,
+  "slug": "coffee-and-sunshine-7097e4be",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

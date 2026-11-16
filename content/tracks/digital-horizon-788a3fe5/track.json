@@ -1,0 +1,26 @@
+{
+  "title": "Digital Horizon",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "F# minor",
+  "description": "",
+  "genre": "Future Bass",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "electronic",
+    "edm"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 150,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "digital-horizon-788a3fe5",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

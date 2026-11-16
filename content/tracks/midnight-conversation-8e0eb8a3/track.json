@@ -1,0 +1,26 @@
+{
+  "title": "Midnight Conversation",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "Eb major",
+  "description": "",
+  "genre": "Smooth Jazz",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "jazz",
+    "lounge"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 96,
+  "download": false,
+  "createdAt": "2026-11-16",
+  "demo": false,
+  "slug": "midnight-conversation-8e0eb8a3",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

@@ -1,0 +1,26 @@
+{
+  "title": "Morning Routine",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "F major",
+  "description": "",
+  "genre": "Lo-Fi Hip Hop",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "lofi",
+    "chill"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 82,
+  "download": false,
+  "createdAt": "2026-11-16",
+  "demo": false,
+  "slug": "morning-routine-c5dd8a9c",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

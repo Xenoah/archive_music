@@ -1,0 +1,26 @@
+{
+  "title": "Open Road",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "A major",
+  "description": "",
+  "genre": "Country Rock",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "country",
+    "rock"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 124,
+  "download": false,
+  "createdAt": "2026-11-16",
+  "demo": false,
+  "slug": "open-road-a1e835e0",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

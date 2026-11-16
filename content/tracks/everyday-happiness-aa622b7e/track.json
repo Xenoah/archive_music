@@ -1,0 +1,26 @@
+{
+  "title": "Everyday Happiness",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "C major",
+  "description": "",
+  "genre": "Indie Pop",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "indie",
+    "pop"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 118,
+  "download": false,
+  "createdAt": "2026-11-16",
+  "demo": false,
+  "slug": "everyday-happiness-aa622b7e",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
