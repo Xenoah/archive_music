@@ -1,0 +1,26 @@
+{
+  "title": "Industrial Pulse",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "G minor",
+  "description": "",
+  "genre": "Techno",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "techno",
+    "electronic"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 130,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "industrial-pulse-6fd00b39",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

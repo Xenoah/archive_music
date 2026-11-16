@@ -1,0 +1,26 @@
+{
+  "title": "Breakneck",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "D minor",
+  "description": "",
+  "genre": "Drum and Bass",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "dnb",
+    "electronic"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 174,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "breakneck-ba53e7eb",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

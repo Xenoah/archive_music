@@ -1,0 +1,26 @@
+{
+  "title": "Electric Momentum",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "C minor",
+  "description": "",
+  "genre": "Progressive House",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "house",
+    "electronic"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 126,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "electric-momentum-0df96353",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

@@ -1,0 +1,26 @@
+{
+  "title": "Infinite Cosmos",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "C major",
+  "description": "",
+  "genre": "Space Ambient",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "ambient",
+    "space"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 60,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "infinite-cosmos-de7b02c1",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

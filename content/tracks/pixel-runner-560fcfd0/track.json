@@ -1,0 +1,26 @@
+{
+  "title": "Pixel Runner",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "C major",
+  "description": "",
+  "genre": "Chiptune",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "chiptune",
+    "retro"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 140,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "pixel-runner-560fcfd0",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

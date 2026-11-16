@@ -1,0 +1,26 @@
+{
+  "title": "Puzzle Garden",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "A minor",
+  "description": "",
+  "genre": "Minimal Electronic",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "minimal",
+    "electronic"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 100,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "puzzle-garden-cd33adf5",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

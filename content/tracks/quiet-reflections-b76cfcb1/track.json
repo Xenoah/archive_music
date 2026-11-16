@@ -1,0 +1,26 @@
+{
+  "title": "Quiet Reflections",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "C minor",
+  "description": "",
+  "genre": "Neo-Classical",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "neoclassical",
+    "piano"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 76,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "quiet-reflections-b76cfcb1",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

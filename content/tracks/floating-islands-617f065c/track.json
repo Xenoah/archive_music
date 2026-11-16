@@ -1,0 +1,26 @@
+{
+  "title": "Floating Islands",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "D major",
+  "description": "",
+  "genre": "Dream Pop",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "dreampop",
+    "chill"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 104,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "floating-islands-617f065c",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
