@@ -1,0 +1,26 @@
+{
+  "title": "Midnight Tango",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "A minor",
+  "description": "",
+  "genre": "Argentine Tango",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "tango",
+    "latin"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 120,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "midnight-tango-7327c323",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

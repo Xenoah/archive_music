@@ -1,0 +1,26 @@
+{
+  "title": "Clockwork Mystery",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "B minor",
+  "description": "",
+  "genre": "Suspense Soundtrack",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "suspense",
+    "soundtrack"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 84,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "clockwork-mystery-14a36f63",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
