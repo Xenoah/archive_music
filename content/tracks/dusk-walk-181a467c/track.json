@@ -1,0 +1,25 @@
+{
+  "title": "Dusk Walk",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "Bm",
+  "description": "",
+  "genre": "BGM",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "piano",
+    "daily"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 80,
+  "download": false,
+  "createdAt": "2026-11-16",
+  "demo": false,
+  "slug": "dusk-walk-181a467c",
+  "audio": "original.mp3",
+  "cover": null
+}
