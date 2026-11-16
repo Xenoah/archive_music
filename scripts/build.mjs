@@ -99,6 +99,15 @@ for (const track of tracks) {
     await writeFile(path.join(mediaDir, "auto-cover.png"), renderAutoCover(analysis, track.slug));
     cover = `${mediaUrl}auto-cover.png`;
   }
+  
+  // --- MIDI（あればダウンロード用に公開する）
+  
+  
+  let midi = null;
+  if (track.midiFile) {
+    await copyFile(path.join(track.dir, track.midiFile), path.join(mediaDir, track.midiFile));
+    midi = `${mediaUrl}${enc(track.midiFile)}`;
+  }
 
   const bpm = track.bpmManual ?? analysis?.bpm ?? null;
   published.push({
@@ -110,6 +119,7 @@ for (const track of tracks) {
     genre: track.genre,
     tags: track.tags,
     generationTools: track.generationTools,
+  
     key: track.key,
     license: track.license,
     status: track.status,
@@ -125,6 +135,8 @@ for (const track of tracks) {
     format: ext.slice(1).toUpperCase(),
     download: track.download ? `${mediaUrl}${enc(track.audioFile)}` : null,
     downloadName: track.download ? `${track.slug}${ext}` : null,
+    midi,
+    midiName: midi ? `${track.slug}${path.extname(track.midiFile).toLowerCase()}` : null,
     cover,
     analysis: analysis ? `${mediaUrl}analysis.json` : null,
     mini: analysis?.mini ?? null,
