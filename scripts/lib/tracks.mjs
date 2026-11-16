@@ -49,7 +49,7 @@ export async function loadTrack(slug, config) {
   else if (audioFiles.length === 0 && data.status !== "draft") track.errors.push("音声ファイルがありません");
   else if (audioFiles.length > 1) track.errors.push(`音声ファイルが複数あります (${audioFiles.join(", ")})。Front Matter の audio: で1つ指定してください`);
 
-)  const images = files.filter((name) => IMAGE_EXTENSIONS.has(path.extname(name).toLowerCase()));
+  const images = files.filter((name) => IMAGE_EXTENSIONS.has(path.extname(name).toLowerCase()));
   if (data.cover) {
     if (images.includes(String(data.cover))) track.coverFile = String(data.cover);
     else track.errors.push(`cover: "${data.cover}" が見つかりません`);
