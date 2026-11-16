@@ -7,6 +7,7 @@ import {crc32} from '../site/src/zip.js';
 import {normalizeGenerationTools} from '../site/src/generation-tools.js';
 export const AUDIO=new Set(['.mp3','.wav','.flac','.m4a','.ogg','.oga','.aac','.opus','.aif','.aiff','.webm']);
 export const IMAGE=new Set(['.png','.jpg','.jpeg','.webp','.gif','.avif']);
+export const MIDI=new Set(['.mid','.midi']);
 export const MAX_BYTES=95*1024*1024;
 export const hash=data=>createHash('sha256').update(data).digest('hex');
 export const exists=async p=>{try{await fs.access(p);return true;}catch{return false;}};
