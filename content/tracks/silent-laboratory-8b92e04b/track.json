@@ -1,0 +1,26 @@
+{
+  "title": "Silent Laboratory",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "D minor",
+  "description": "",
+  "genre": "Dark Ambient",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "ambient",
+    "dark"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 56,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "silent-laboratory-8b92e04b",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

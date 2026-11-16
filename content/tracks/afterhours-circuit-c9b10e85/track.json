@@ -1,0 +1,26 @@
+{
+  "title": "Afterhours Circuit",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "F minor",
+  "description": "",
+  "genre": "Deep House",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "house",
+    "electronic"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 122,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "afterhours-circuit-c9b10e85",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

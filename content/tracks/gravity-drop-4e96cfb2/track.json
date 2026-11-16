@@ -1,0 +1,26 @@
+{
+  "title": "Gravity Drop",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "F minor",
+  "description": "",
+  "genre": "Dubstep",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "dubstep",
+    "electronic"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 140,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "gravity-drop-4e96cfb2",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

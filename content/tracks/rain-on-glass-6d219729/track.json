@@ -1,0 +1,26 @@
+{
+  "title": "Rain on Glass",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "A minor",
+  "description": "",
+  "genre": "Ambient Piano",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "ambient",
+    "piano"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 72,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "rain-on-glass-6d219729",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
