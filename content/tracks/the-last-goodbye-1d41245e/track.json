@@ -1,0 +1,26 @@
+{
+  "title": "The Last Goodbye",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "F major",
+  "description": "",
+  "genre": "Emotional Soundtrack",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "emotional",
+    "soundtrack"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 68,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "the-last-goodbye-1d41245e",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

@@ -1,0 +1,26 @@
+{
+  "title": "Hidden Kingdom",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "G major",
+  "description": "",
+  "genre": "Fantasy Orchestral",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "fantasy",
+    "orchestral"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 88,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "hidden-kingdom-d4fde235",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

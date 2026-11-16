@@ -1,0 +1,26 @@
+{
+  "title": "Island Breeze",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "A major",
+  "description": "",
+  "genre": "Reggae",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "reggae",
+    "chill"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 74,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "island-breeze-cc68a9b3",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

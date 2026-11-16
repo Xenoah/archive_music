@@ -1,0 +1,26 @@
+{
+  "title": "The Final Stand",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "D minor",
+  "description": "",
+  "genre": "Epic Orchestral",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "epic",
+    "orchestral"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 100,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "the-final-stand-aac010eb",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

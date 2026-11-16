@@ -1,0 +1,26 @@
+{
+  "title": "Something in the Dark",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "E minor",
+  "description": "",
+  "genre": "Horror Ambient",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "horror",
+    "ambient"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 60,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "something-in-the-dark-4e6b35f6",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

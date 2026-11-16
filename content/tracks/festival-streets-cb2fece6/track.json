@@ -1,0 +1,26 @@
+{
+  "title": "Festival Streets",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "Bb major",
+  "description": "",
+  "genre": "Ska",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "ska",
+    "upbeat"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 150,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "festival-streets-cb2fece6",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

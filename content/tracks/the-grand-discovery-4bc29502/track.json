@@ -1,0 +1,26 @@
+{
+  "title": "The Grand Discovery",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "D major",
+  "description": "",
+  "genre": "Cinematic Orchestral",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "cinematic",
+    "orchestral"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 92,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "the-grand-discovery-4bc29502",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

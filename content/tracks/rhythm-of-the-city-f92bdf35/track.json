@@ -1,0 +1,26 @@
+{
+  "title": "Rhythm of the City",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "C minor",
+  "description": "",
+  "genre": "Latin Funk",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "latin",
+    "funk"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 116,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "rhythm-of-the-city-f92bdf35",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
