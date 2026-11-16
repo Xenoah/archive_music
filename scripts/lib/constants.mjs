@@ -18,6 +18,7 @@ export const AUDIO_EXTENSIONS = new Set([
 ]);
 export const LOSSLESS_EXTENSIONS = new Set([".wav", ".flac", ".aif", ".aiff"]);
 export const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"]);
+export const MIDI_EXTENSIONS = new Set([".mid", ".midi"]);
 export const INFO_EXTENSIONS = new Set([".md", ".json", ".txt"]);
 
 export const MIME = {
@@ -26,6 +27,7 @@ export const MIME = {
   ".aif": "audio/aiff", ".aiff": "audio/aiff", ".webm": "audio/webm",
   ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp",
   ".gif": "image/gif", ".avif": "image/avif", ".svg": "image/svg+xml",
+    ".mid": "audio/midi", ".midi": "audio/midi",
   ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",
   ".js": "text/javascript; charset=utf-8", ".mjs": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8", ".xml": "application/xml; charset=utf-8",
@@ -39,5 +41,5 @@ export const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 export const FRONT_MATTER_ORDER = [
   "title", "artist", "album", "genre", "tags", "generationTools", "bpm", "key", "license", "status",
-  "download", "createdAt", "uploadedAt", "updatedAt", "audio", "cover"
+  "download", "createdAt", "uploadedAt", "updatedAt", "audio", "cover", "midi"
 ];
