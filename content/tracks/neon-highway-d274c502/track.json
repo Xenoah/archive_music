@@ -1,0 +1,26 @@
+{
+  "title": "Neon Highway",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "A minor",
+  "description": "",
+  "genre": "Synthwave",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "synthwave",
+    "retro"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 102,
+  "download": false,
+  "createdAt": "2026-11-16",
+  "demo": false,
+  "slug": "neon-highway-d274c502",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

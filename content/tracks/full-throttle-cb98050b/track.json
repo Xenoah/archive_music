@@ -1,0 +1,26 @@
+{
+  "title": "Full Throttle",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "E minor",
+  "description": "",
+  "genre": "Hard Rock",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "rock",
+    "driving"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 138,
+  "download": false,
+  "createdAt": "2026-11-16",
+  "demo": false,
+  "slug": "full-throttle-cb98050b",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

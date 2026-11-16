@@ -1,0 +1,26 @@
+{
+  "title": "Downtown Shuffle",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "G major",
+  "description": "",
+  "genre": "Jazz Fusion",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "jazz",
+    "fusion"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 112,
+  "download": false,
+  "createdAt": "2026-11-16",
+  "demo": false,
+  "slug": "downtown-shuffle-131ca973",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

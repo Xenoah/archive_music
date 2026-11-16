@@ -1,0 +1,26 @@
+{
+  "title": "Steel Velocity",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "D minor",
+  "description": "",
+  "genre": "Heavy Metal",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "metal",
+    "driving"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 160,
+  "download": false,
+  "createdAt": "2026-11-16",
+  "demo": false,
+  "slug": "steel-velocity-f760ccbd",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

@@ -1,0 +1,26 @@
+{
+  "title": "Lazy Afternoon",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "D major",
+  "description": "",
+  "genre": "Acoustic Folk",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "acoustic",
+    "folk"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 92,
+  "download": false,
+  "createdAt": "2026-11-16",
+  "demo": false,
+  "slug": "lazy-afternoon-8a475754",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

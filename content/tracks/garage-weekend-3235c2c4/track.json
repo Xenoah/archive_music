@@ -1,0 +1,26 @@
+{
+  "title": "Garage Weekend",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "E major",
+  "description": "",
+  "genre": "Blues Rock",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "blues",
+    "rock"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 108,
+  "download": false,
+  "createdAt": "2026-11-16",
+  "demo": false,
+  "slug": "garage-weekend-3235c2c4",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
