@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import {fileURLToPath} from 'node:url';
-import {AUDIO,IMAGE,MAX_BYTES,exists,filesIn,hash,slugify,validSlug,json,writeJSON,validateMeta,probe,unpackZIP} from './lib.mjs';
+import {AUDIO,IMAGE,MIDI,MAX_BYTES,exists,filesIn,hash,slugify,validSlug,json,writeJSON,validateMeta,probe,unpackZIP} from './lib.mjs';
 import {parseFrontMatter} from './lib/frontmatter.mjs';
 import {toList} from './lib/util.mjs';
 import {extractCoverArt} from './lib/audio.mjs';
@@ -21,7 +21,7 @@ export async function importInbox(root, {dryRun=false}={}) {
     const source=path.join(inbox,entry.name), sources=[source];
     if (entry.isFile() && AUDIO.has(ext)) {
       const stem=path.parse(entry.name).name;
-      for (const side of entries) if (side.isFile() && path.parse(side.name).name===stem && (IMAGE.has(path.extname(side.name).toLowerCase()) || ['.md','.json'].includes(path.extname(side.name).toLowerCase()))) sources.push(path.join(inbox,side.name));
+      for (const side of entries) if (side.isFile() && path.parse(side.name).name===stem && (IMAGE.has(path.extname(side.name).toLowerCase()) || MIDI.has(path.extname(side.name).toLowerCase()) || ['.md','.json'].includes(path.extname(side.name).toLowerCase()))) sources.push(path.join(inbox,side.name));
     }
     for (const file of sources) { if(claimed.has(file)) throw new Error(`Ambiguous sidecar: ${path.basename(file)}`); claimed.add(file); }
     groups.push({entry,source,sources});
@@ -62,13 +62,18 @@ export async function importInbox(root, {dryRun=false}={}) {
       const covers=files.filter(f=>IMAGE.has(path.extname(f).toLowerCase()));
       if(covers.length>1) throw new Error('Use one cover image per track');
       if(covers[0]&&(await fs.stat(covers[0])).size>10*1024*1024) throw new Error('Cover exceeds 10 MiB');
+            const midis=files.filter(f=>MIDI.has(path.extname(f).toLowerCase()));       
+      if(midis.length>1) throw new Error('Use one MIDI file per track');
+      if(midis[0]&&(await fs.stat(midis[0])).size>10*1024*1024) throw new Error('MIDI exceeds 10 MiB');
       if(dryRun) { result.push(slug); console.log(`Would import: ${slug}`); continue; }
       const stage=path.join(temp,'normalized'); await fs.mkdir(stage);
       const filename='original'+path.extname(audio).toLowerCase(); await fs.copyFile(audio,path.join(stage,filename));
       let cover=null;
       if(covers[0]) { cover='cover'+path.extname(covers[0]).toLowerCase(); await fs.copyFile(covers[0],path.join(stage,cover)); }
       else if(extractCoverArt(audio,path.join(stage,'cover.jpg'))) cover='cover.jpg';
-      await writeJSON(path.join(stage,'track.json'),{...meta,slug,audio:filename,cover});
+      let midi=null;
+      if(midis[0]) { midi='midi'+path.extname(midis[0]).toLowerCase(); await fs.copyFile(midis[0],path.join(stage,midi)); }
+      await writeJSON(path.join(stage,'track.json'),{...meta,slug,audio:filename,cover,midi});
       await fs.cp(stage,target,{recursive:true});
       const moved=[];
       try {
