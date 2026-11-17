@@ -1,0 +1,26 @@
+{
+  "title": "Velvet Groove",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "Eb major",
+  "description": "",
+  "genre": "Neo Soul",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "soul",
+    "groove"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 92,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "velvet-groove-46055936",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

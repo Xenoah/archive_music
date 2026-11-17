@@ -1,0 +1,26 @@
+{
+  "title": "Tiny Troubles",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "C major",
+  "description": "",
+  "genre": "Comedy Orchestral",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "comedy",
+    "orchestral"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 120,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "tiny-troubles-5fb3f18c",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

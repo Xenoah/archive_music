@@ -1,0 +1,26 @@
+{
+  "title": "Urban Shadows",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "C minor",
+  "description": "",
+  "genre": "Trip Hop",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "triphop",
+    "downtempo"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 84,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "urban-shadows-845079e5",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

@@ -1,0 +1,26 @@
+{
+  "title": "Winter Lanterns",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "F major",
+  "description": "",
+  "genre": "Holiday Swing",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "holiday",
+    "swing"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 140,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "winter-lanterns-f7811f1b",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
