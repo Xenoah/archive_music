@@ -1,0 +1,26 @@
+{
+  "title": "Emerald Highlands",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "D major",
+  "description": "",
+  "genre": "Celtic Folk",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "celtic",
+    "folk"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 112,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "emerald-highlands-7e198c39",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
