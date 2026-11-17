@@ -1,0 +1,26 @@
+{
+  "title": "Retro Boulevard",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "A minor",
+  "description": "",
+  "genre": "Disco Funk",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "disco",
+    "funk"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 116,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "retro-boulevard-b80f2f79",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

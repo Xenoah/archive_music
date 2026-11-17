@@ -1,0 +1,26 @@
+{
+  "title": "Executive Vision",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "C major",
+  "description": "",
+  "genre": "Corporate Pop",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "corporate",
+    "pop"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 110,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "executive-vision-c369bb70",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

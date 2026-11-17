@@ -1,0 +1,26 @@
+{
+  "title": "Until Tomorrow",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "E minor",
+  "description": "",
+  "genre": "Post-Rock",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "postrock",
+    "guitar"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 100,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "until-tomorrow-06a6fd14",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

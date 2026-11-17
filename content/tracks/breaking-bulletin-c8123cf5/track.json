@@ -1,0 +1,26 @@
+{
+  "title": "Breaking Bulletin",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "G minor",
+  "description": "",
+  "genre": "Broadcast Electronic",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "broadcast",
+    "electronic"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 128,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "breaking-bulletin-c8123cf5",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

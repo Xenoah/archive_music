@@ -1,0 +1,26 @@
+{
+  "title": "Afternoon in Paris",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "G major",
+  "description": "",
+  "genre": "French Musette",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "french",
+    "cafe"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 132,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "afternoon-in-paris-cde9b0f8",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
