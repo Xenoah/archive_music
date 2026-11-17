@@ -1,0 +1,26 @@
+{
+  "title": "Mountain Temple",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "D major",
+  "description": "",
+  "genre": "Indian Classical Fusion",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "indian",
+    "world"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 90,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "mountain-temple-06621163",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

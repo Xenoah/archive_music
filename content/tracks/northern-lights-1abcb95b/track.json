@@ -1,0 +1,26 @@
+{
+  "title": "Northern Lights",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "A minor",
+  "description": "",
+  "genre": "Nordic Folk",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "nordic",
+    "folk"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 88,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "northern-lights-1abcb95b",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

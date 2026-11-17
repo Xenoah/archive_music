@@ -1,0 +1,26 @@
+{
+  "title": "Eastern Winds",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "D minor",
+  "description": "",
+  "genre": "Traditional Japanese",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "japanese",
+    "traditional"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 80,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "eastern-winds-2e714d91",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

@@ -1,0 +1,26 @@
+{
+  "title": "Bamboo Moon",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "G major",
+  "description": "",
+  "genre": "Chinese Traditional",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "chinese",
+    "traditional"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 84,
+  "download": false,
+  "createdAt": "2026-11-17",
+  "demo": false,
+  "slug": "bamboo-moon-841387c9",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
