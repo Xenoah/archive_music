@@ -13,7 +13,8 @@
     "ambient"
   ],
   "generationTools": [
-    "Musio"
+    "Musio",
+    "Muse"
   ],
   "bpm": 60,
   "download": false,
