@@ -97,7 +97,7 @@ createdAt: 2026-11-15
 制作メモ。**Markdown**とリンクが使えます。
 ```
 
-生成ツールは `Suno`・`Claude`・`FLSM`・`Musio` から複数指定できます。コマンドでは `--tools "Suno,Claude"`、JSONでは `"generationTools": ["Suno", "Claude"]`、Studioではチェックボックスを使います。曲ページ・一覧に表示され、ツール名でも検索できます。大文字小文字と重複は正規化します。省略・空配列は未設定です。既存曲の変更も `track.json` またはMarkdownを編集してcommit・pushします。
+生成ツールは `Suno`・`Claude`・`FLSM`・`Musio`・`Muse` から複数指定できます。コマンドでは `--tools "Suno,Claude"`、JSONでは `"generationTools": ["Suno", "Claude"]`、Studioではチェックボックスを使います。曲ページ・一覧に表示され、ツール名でも検索できます。大文字小文字と重複は正規化します。省略・空配列は未設定です。既存曲の変更も `track.json` またはMarkdownを編集してcommit・pushします。
 
 音源や画像が複数ある場合は `audio: original.flac` / `cover: cover.png` を指定します。パスはその作品フォルダー直下のファイル名のみ。slugは文字・数字から始まる文字・数字・`-`・`_`。CLI取り込み時は80文字以内、省略すると曲名＋音源ハッシュから生成します。
 
