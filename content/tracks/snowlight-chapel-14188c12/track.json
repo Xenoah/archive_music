@@ -13,7 +13,8 @@
     "piano"
   ],
   "generationTools": [
-    "Musio"
+    "Musio",
+    "Muse"
   ],
   "bpm": 68,
   "download": false,
