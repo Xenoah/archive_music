@@ -13,7 +13,8 @@
     "orchestral"
   ],
   "generationTools": [
-    "Musio"
+    "Musio",
+    "Muse"
   ],
   "bpm": 88,
   "download": false,
