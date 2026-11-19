@@ -1,0 +1,26 @@
+{
+  "title": "Harbor of Gulls",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "F major",
+  "description": "",
+  "genre": "Fantasy Orchestral",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "fantasy",
+    "orchestral"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 88,
+  "download": false,
+  "createdAt": "2026-11-19",
+  "demo": false,
+  "slug": "harbor-of-gulls-b64cc4d4",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
