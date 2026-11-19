@@ -1,0 +1,26 @@
+{
+  "title": "Emberwick Town",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "C major",
+  "description": "",
+  "genre": "Fantasy Orchestral",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "fantasy",
+    "orchestral"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 92,
+  "download": false,
+  "createdAt": "2026-11-19",
+  "demo": false,
+  "slug": "emberwick-town-a3adee7d",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

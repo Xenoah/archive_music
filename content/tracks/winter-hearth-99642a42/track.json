@@ -1,0 +1,26 @@
+{
+  "title": "Winter Hearth",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "G major",
+  "description": "",
+  "genre": "Winter Ambient",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "winter",
+    "ambient"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 60,
+  "download": false,
+  "createdAt": "2026-11-19",
+  "demo": false,
+  "slug": "winter-hearth-99642a42",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}

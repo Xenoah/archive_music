@@ -1,0 +1,26 @@
+{
+  "title": "Snowlight Chapel",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "D major",
+  "description": "",
+  "genre": "Christmas Piano",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "christmas",
+    "piano"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 68,
+  "download": false,
+  "createdAt": "2026-11-19",
+  "demo": false,
+  "slug": "snowlight-chapel-14188c12",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
