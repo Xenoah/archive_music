@@ -123,6 +123,7 @@ dist/
   media/{slug}/                  # 配信音声・カバー・圧縮解析JSON
   studio/                       # 従来の試聴・ZIP作成画面
   rss.xml / sitemap.xml / robots.txt
+  catalog.json / llms.txt        # AIエージェント向けカタログ（絶対URL）・案内と全曲リスト
 ```
 
 ロスレス音源は既定で256 kbit/sのMP3へ変換します。設定は `site.config.json`。解析・変換結果は `.cache/` に保存します。
