@@ -4,6 +4,7 @@
 //   dist/t/{slug}/index.html                 … 曲ごとのページ（OGP・JSON-LD 入り）
 //   dist/media/{slug}/                       … 音声・カバー・analysis.json
 //   dist/data/tracks.json                    … 一覧データ
+//   dist/catalog.json, llms.txt              … AIエージェント向けカタログと案内
 //   dist/rss.xml, sitemap.xml, robots.txt
 //
 // 環境変数: PUBLIC_BASE_PATH (例 /my-repo)、PUBLIC_SITE (例 https://user.github.io)
@@ -171,6 +172,8 @@ function page({ title, description, rel, robots = "index, follow", image, type =
     origin ? `<meta property="og:url" content="${escapeHtml(absolute(rel))}">` : "",
     image && origin ? `<meta property="og:image" content="${escapeHtml(absolute(image))}">` : "",
     `<meta name="twitter:card" content="summary">`,
+    `<link rel="alternate" type="application/rss+xml" title="${escapeHtml(config.title)} RSS" href="${escapeHtml(absolute("rss.xml"))}">`,
+    `<link rel="alternate" type="application/json" title="${escapeHtml(config.title)} track catalog (JSON)" href="${escapeHtml(absolute("data/tracks.json"))}">`,
     jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, "\\u003c")}</script>` : ""
   ].filter(Boolean).join("\n");
   const values = {
@@ -184,7 +187,16 @@ const listHtml = `<h1>${escapeHtml(config.title)}</h1><p>${escapeHtml(tagline)}<
 const home = page({
   title: tagline ? `${config.title} — ${tagline}` : config.title,
   description: tagline || `${config.title} の楽曲一覧`, rel: "", staticHtml: listHtml,
-  jsonLd: { "@context": "https://schema.org", "@type": "WebSite", name: config.title, ...(origin ? { url: absolute("") } : {}) }
+  jsonLd: {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebSite", name: config.title, ...(origin ? { url: absolute("") } : {}) },
+      ...(indexable.length ? [{
+        "@type": "ItemList", name: `${config.title} — tracks`, numberOfItems: indexable.length,
+        itemListElement: indexable.map((t, i) => ({ "@type": "ListItem", position: i + 1, name: t.title, ...(origin ? { url: absolute(`t/${enc(t.slug)}/`) } : {}) }))
+      }] : [])
+    ]
+  }
 });
 await writeFile(path.join(DIST_DIR, "index.html"), home);
 await writeFile(path.join(DIST_DIR, "404.html"), page({ title: config.title, description: tagline, rel: "", robots: "noindex, follow" }));
@@ -208,9 +220,13 @@ for (const track of published) {
       ...(track.artist ? { byArtist: { "@type": "MusicGroup", name: track.artist } } : {}),
       ...(track.duration ? { duration: isoDuration(track.duration) } : {}),
       ...(track.genre ? { genre: track.genre } : {}),
+      ...(track.tags.length ? { keywords: track.tags.join(", ") } : {}),
+      ...(track.license ? { license: track.license } : {}),
       ...(track.date ? { datePublished: track.date } : {}),
       ...(origin ? { url: absolute(`t/${enc(track.slug)}/`) } : {}),
-      ...(origin && track.cover ? { image: absolute(track.cover) } : {})
+      ...(origin && track.cover ? { image: absolute(track.cover) } : {}),
+      ...(origin ? { audio: { "@type": "AudioObject", contentUrl: absolute(track.audio), encodingFormat: track.audioType, ...(track.duration ? { duration: isoDuration(track.duration) } : {}) } } : {}),
+      identifier: track.slug
     }
   }));
 }
@@ -241,7 +257,73 @@ ${urls.map((rel) => `<url><loc>${xml(absolute(rel))}</loc></url>`).join("\n")}
 </urlset>
 `);
 }
-await writeFile(path.join(DIST_DIR, "robots.txt"), `User-agent: *\nAllow: /\n${origin ? `Sitemap: ${absolute("sitemap.xml")}\n` : ""}`);
+const aiCrawlers = ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "Claude-User", "anthropic-ai", "Google-Extended", "PerplexityBot", "Perplexity-User", "Applebot-Extended", "CCBot", "Meta-ExternalAgent", "cohere-ai", "DuckAssistBot", "MistralAI-User", "YouBot"];
+await writeFile(path.join(DIST_DIR, "robots.txt"), [
+  `# ${config.title} — for AI agents: ${absolute("llms.txt")} (site guide and full track list), JSON catalog: ${absolute("catalog.json")}`,
+  ...aiCrawlers.map((ua) => `User-agent: ${ua}\nAllow: /\n`),
+  "User-agent: *",
+  "Allow: /",
+  ...(origin ? [`Sitemap: ${absolute("sitemap.xml")}`] : []),
+  ""
+].join("\n"));
+
+// --- AIエージェント向け: catalog.json（絶対URLで引ける全曲カタログ）と llms.txt（案内＋全曲リスト）
+const catalogTracks = indexable.map((t) => ({
+  title: t.title,
+  artist: t.artist,
+  genre: t.genre,
+  tags: t.tags,
+  bpm: t.bpm,
+  key: t.key,
+  durationSeconds: t.duration,
+  license: t.license,
+  generationTools: t.generationTools,
+  published: t.date || null,
+  page: absolute(`t/${enc(t.slug)}/`),
+  audio: absolute(t.audio),
+  ...(t.midi ? { midi: absolute(t.midi) } : {}),
+  ...(t.cover ? { cover: absolute(t.cover) } : {}),
+  ...(t.download ? { download: absolute(t.download) } : {})
+}));
+await writeFile(path.join(DIST_DIR, "catalog.json"), JSON.stringify({
+  name: config.title,
+  description: tagline || `${config.title} の楽曲カタログ`,
+  ...(origin ? { url: absolute("") } : {}),
+  author: config.author,
+  defaultLicense: config.defaultLicense,
+  build: buildId,
+  trackCount: catalogTracks.length,
+  tracks: catalogTracks
+}, null, 2));
+const mmss = (s) => (s == null ? "" : `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, "0")}`);
+await writeFile(path.join(DIST_DIR, "llms.txt"), [
+  `# ${config.title}`,
+  "",
+  `> ${tagline || `${config.title} の楽曲アーカイブ`}。${config.author} がAI作曲ツールで制作したBGM ${indexable.length}曲を公開するアーカイブです。各曲のページで試聴できます。MIDIファイルを用意した曲は、カタログと下記リストにMIDIのURLを併記しています。`,
+  "",
+  "## Machine-readable resources",
+  "",
+  `- Full track catalog (JSON, absolute URLs): ${absolute("catalog.json")}`,
+  `- Track data used by the site player (JSON): ${absolute("data/tracks.json")}`,
+  `- RSS feed (with audio enclosures): ${absolute("rss.xml")}`,
+  `- Sitemap: ${absolute("sitemap.xml")}`,
+  `- About: ${absolute("about/")}`,
+  "",
+  "## Usage and license",
+  "",
+  `- Default license: ${config.defaultLicense}. Individual tracks may state a different license in the catalog's license field.`,
+  "- When recommending or citing a track, link to its track page URL.",
+  "- Audio files are for listening via this site. Do not redistribute audio files. A separate download URL is provided in the catalog only for tracks whose download field is set.",
+  "- Each track lists its generationTools (the AI tools used to create it).",
+  "",
+  "## Tracks",
+  "",
+  ...indexable.map((t) => {
+    const facts = [t.genre, t.bpm ? `${t.bpm} BPM` : "", t.key || "", t.duration != null ? mmss(t.duration) : "", t.generationTools.length ? `tools: ${t.generationTools.join(", ")}` : ""].filter(Boolean).join(" · ");
+    return `- [${t.title}](${absolute(`t/${enc(t.slug)}/`)}): ${facts} — audio: ${absolute(t.audio)}${t.midi ? ` — MIDI: ${absolute(t.midi)}` : ""}`;
+  }),
+  ""
+].join("\n"));
 await writeFile(path.join(DIST_DIR, ".nojekyll"), "");
 
 console.log(`[INFO] build: ${published.length} track(s) -> ${DIST_DIR}/  (base: ${base}${origin ? `, site: ${origin}` : ""})`);
