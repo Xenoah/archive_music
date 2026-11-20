@@ -1,0 +1,27 @@
+{
+  "title": "Forest Shrine Path",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "D minor",
+  "description": "",
+  "genre": "Fantasy Ambient",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "fantasy",
+    "ambient"
+  ],
+  "generationTools": [
+    "Musio",
+    "Muse"
+  ],
+  "bpm": 76,
+  "download": false,
+  "createdAt": "2026-11-20",
+  "demo": false,
+  "slug": "forest-shrine-path-1f415f85",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
