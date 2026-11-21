@@ -1,0 +1,26 @@
+{
+  "title": "Snowfield Village",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "A major",
+  "description": "",
+  "genre": "Fantasy Piano",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "fantasy",
+    "piano"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 72,
+  "download": false,
+  "createdAt": "2026-11-22",
+  "demo": false,
+  "slug": "snowfield-village-f69f6c6c",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
