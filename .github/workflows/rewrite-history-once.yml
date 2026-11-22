@@ -1,0 +1,45 @@
+name: Rewrite history once (remove _uploaded)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rewrite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror clone
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git clone --mirror "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" repo.git
+
+      - name: Install git-filter-repo
+        run: |
+          mkdir -p "$HOME/bin"
+          curl -fsSL -o "$HOME/bin/git-filter-repo" https://raw.githubusercontent.com/newren/git-filter-repo/main/git-filter-repo
+          chmod +x "$HOME/bin/git-filter-repo"
+          echo "$HOME/bin" >> "$GITHUB_PATH"
+
+      - name: Strip _uploaded from all history
+        run: |
+          cd repo.git
+          echo "Old HEAD: $(git rev-parse HEAD)"
+          test -n "$(git ls-tree HEAD _uploaded)" || { echo "_uploaded not found in HEAD tree; aborting"; exit 1; }
+          before=$(git ls-tree HEAD content/tracks | wc -l)
+          echo "Track folders before: $before"
+          git filter-repo --path _uploaded --invert-paths --force
+          echo "New HEAD: $(git rev-parse HEAD)"
+          test -z "$(git ls-tree HEAD _uploaded)" || { echo "_uploaded still present after rewrite; aborting"; exit 1; }
+          after=$(git ls-tree HEAD content/tracks | wc -l)
+          echo "Track folders after: $after"
+          test "$before" = "$after" || { echo "Track folder count changed; aborting"; exit 1; }
+
+      - name: Force push rewritten history
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd repo.git
+          git push --mirror --force "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
