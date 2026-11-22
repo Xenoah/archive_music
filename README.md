@@ -74,7 +74,7 @@ git push origin main
 
 取り込み対象は **MP3 / WAV / FLAC / M4A / OGG / OGA / AAC / OPUS / AIF / AIFF / WEBM**。1音源95 MiB以下・20分以内。ZIPは圧縮前後95 MiB以下・32エントリー以下です。パス遡及・シンボリックリンク・暗号化・重複エントリー・CRC不一致を拒否します。StudioのZIP準備は24 MiB以下です。
 
-取り込み後は原本を `_uploaded/{slug}/` に退避し、`content/tracks/{slug}/track.json` と `original.ext` を生成します。同じslugへの再投稿は既存曲を上書きせずエラーにします。共同投稿はfork→Pull Request→マージで行えます。
+取り込み後は原本を保持せず削除し、`content/tracks/{slug}/track.json` と `original.ext` を生成します。同じslugへの再投稿は既存曲を上書きせずエラーにします。共同投稿はfork→Pull Request→マージで行えます。
 
 ## 曲情報の編集
 

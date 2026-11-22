@@ -13,7 +13,7 @@ test('browser ZIP imports, archives, builds metadata and skips draft audio',asyn
   const meta={slug:'fixture-song',title:'テスト曲 <safe>',artist:'Test',genre:'Test',generationTools:['suno','Claude','Suno'],status:'public',download:true};
   const blob=zipFiles([{name:'fixture-song/track.json',data:JSON.stringify(meta)},{name:'fixture-song/audio.wav',data:clickWav()}]);
   await fs.writeFile(path.join(dir,'_inbox','song.zip'),Buffer.from(await blob.arrayBuffer()));
-  assert.deepEqual(await importInbox(dir),['fixture-song']);assert.ok(await exists(path.join(dir,'_uploaded/fixture-song/song.zip')));assert.equal(await exists(path.join(dir,'_inbox/song.zip')),false);
+  assert.deepEqual(await importInbox(dir),['fixture-song']);assert.equal(await exists(path.join(dir,'_uploaded/fixture-song/song.zip')),false);assert.equal(await exists(path.join(dir,'_inbox/song.zip')),false);
   assert.deepEqual(await importInbox(dir),[]);
   const normalized=await json(path.join(dir,'content/tracks/fixture-song/track.json'));assert.equal(normalized.audio,'original.wav');assert.deepEqual(normalized.generationTools,['Suno','Claude']);
   await fs.cp(path.resolve('site'),path.join(dir,'site'),{recursive:true});
@@ -66,7 +66,7 @@ test('Markdown sidecars dry-run and archive together, then respect override, bas
   await fs.writeFile(path.join(dir,'_inbox/song.wav'),clickWav());
   await fs.writeFile(path.join(dir,'_inbox/song.md'),'---\nslug: hidden-song\ntitle: "夜の音"\nartist: Test\nbpm: 144\nstatus: hidden\ntags: [night, demo]\ngenerationTools: [FLSM]\ndownload: false\n---\n\n**Markdown description**');
   assert.deepEqual(await importInbox(dir,{dryRun:true}),['hidden-song']);assert.ok(await exists(path.join(dir,'_inbox/song.md')));assert.equal(await exists(path.join(dir,'content/tracks/hidden-song')),false);
-  await importInbox(dir);for(const f of ['song.md','song.wav'])assert.ok(await exists(path.join(dir,'_uploaded/hidden-song',f)));
+  await importInbox(dir);for(const f of ['song.md','song.wav']){assert.equal(await exists(path.join(dir,'_inbox',f)),false);assert.equal(await exists(path.join(dir,'_uploaded/hidden-song',f)),false);}
   const folder=path.join(dir,'content/tracks/hidden-song');
   await fs.writeFile(path.join(folder,'hidden-song.md'),'---\ntitle: Override\nbpm: 150\n---\nNew body');
   await fs.cp(path.resolve('site'),path.join(dir,'site'),{recursive:true});

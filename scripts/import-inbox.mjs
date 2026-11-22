@@ -75,16 +75,12 @@ export async function importInbox(root, {dryRun=false}={}) {
       if(midis[0]) { midi='midi'+path.extname(midis[0]).toLowerCase(); await fs.copyFile(midis[0],path.join(stage,midi)); }
       await writeJSON(path.join(stage,'track.json'),{...meta,slug,audio:filename,cover,midi});
       await fs.cp(stage,target,{recursive:true});
-      const moved=[];
+      // Imported originals are deleted, not archived: keeping them under
+      // _uploaded doubled the per-track repository growth. Duplicate slugs
+      // are still rejected via the content/tracks check above.
       try {
-        if(entry.isDirectory()) { await fs.rename(source,archive); }
-        else {
-          await fs.mkdir(archive);
-          for(const file of sources) { const to=path.join(archive,path.basename(file)); await fs.rename(file,to); moved.push([file,to]); }
-        }
+        for(const file of sources) await fs.rm(file,{recursive:true,force:true});
       } catch(error) {
-        for(const [from,to] of moved.reverse()) await fs.rename(to,from);
-        if(!entry.isDirectory()) await fs.rm(archive,{recursive:true,force:true});
         await fs.rm(target,{recursive:true,force:true}); throw error;
       }
       result.push(slug); console.log(`Imported: ${slug}`);

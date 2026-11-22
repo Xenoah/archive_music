@@ -22,7 +22,7 @@ content/tracks/My-Song/
   My-Song.mp3
   cover.jpg         … 同梱画像 or 埋め込みアート。無ければ auto-cover.png を波形から生成
   analysis.json     … dt-cue の解析コアで作った3バンド波形と BPM
-_uploaded/My-Song/  … 元ファイルの保管
+（元ファイルは取り込み後に削除され、リポジトリには保持されません）
         │  （bot がコミット）
         ▼  Deploy GitHub Pages（.github/workflows/deploy.yml）
 dist/               … 公開される最終フォルダ
@@ -152,7 +152,7 @@ About ページの本文は `content/about.md` です。
 ## 構成
 
 ```text
-_inbox/  _uploaded/  content/tracks/  content/about.md
+_inbox/  content/tracks/  content/about.md
 scripts/
   import-inbox.mjs   取り込み
   analyze.mjs        事前解析
