@@ -1,0 +1,26 @@
+{
+  "title": "Letters Never Sent",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "C minor",
+  "description": "",
+  "genre": "Emotional Piano",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "emotional",
+    "piano"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 66,
+  "download": false,
+  "createdAt": "2026-11-25",
+  "demo": false,
+  "slug": "letters-never-sent-7dcaf16b",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
