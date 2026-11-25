@@ -1,0 +1,26 @@
+{
+  "title": "Rain on the Platform",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "A minor",
+  "description": "",
+  "genre": "Emotional Piano",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "emotional",
+    "piano"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 72,
+  "download": false,
+  "createdAt": "2026-11-26",
+  "demo": false,
+  "slug": "rain-on-the-platform-dc3fe657",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
