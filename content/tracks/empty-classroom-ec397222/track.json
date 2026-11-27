@@ -1,0 +1,26 @@
+{
+  "title": "Empty Classroom",
+  "artist": "Xenoah",
+  "album": "",
+  "key": "E minor",
+  "description": "",
+  "genre": "Emotional Piano",
+  "license": "All rights reserved",
+  "status": "public",
+  "tags": [
+    "bgm",
+    "emotional",
+    "piano"
+  ],
+  "generationTools": [
+    "Musio"
+  ],
+  "bpm": 68,
+  "download": false,
+  "createdAt": "2026-11-28",
+  "demo": false,
+  "slug": "empty-classroom-ec397222",
+  "audio": "original.mp3",
+  "cover": "cover.jpg",
+  "midi": "midi.mid"
+}
